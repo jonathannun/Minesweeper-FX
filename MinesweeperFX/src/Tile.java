@@ -1,11 +1,14 @@
 public class Tile {
-	private Boolean isBomb, isClicked;
-	private int neighbours;
+	private Boolean isBomb, isVisible;
+	private int x, y, neighbours;
 	
-	public Tile() {
+	public Tile(int x, int y) {
 		this.isBomb = false;
-		this.isClicked = false;
+		this.isVisible = false;
 		this.neighbours = 0;
+		
+		this.x = x;
+		this.y = y;
 	}
 	
 	public void setBomb() {
@@ -13,15 +16,15 @@ public class Tile {
 	}
 	
 	public void click() {
-		this.isClicked = true;
+		this.isVisible = true;
 	}
 	
 	public Boolean bombOnTile() {
 		return this.isBomb;
 	}
 	
-	public Boolean tileClicked() {
-		return this.isClicked;
+	public Boolean tileVisible() {
+		return this.isVisible;
 	}
 	
 	public int getNeighbours() {
