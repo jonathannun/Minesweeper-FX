@@ -13,36 +13,38 @@ public class Board {
 	
 	public void populateBoard(int numberOfBombs) {
 		int x, y;
-		for (int i = 0; i < numberOfBombs; i++) {
+		int i = 0;
+		while(i < numberOfBombs) {
 			x = (int) (Math.random() * this.data.length);
 			y = (int) (Math.random() * this.data[0].length);
 			
-			if (this.data[x][y].isTileBomb()) {
-				i--;
-			} else {
+			if (!this.data[x][y].isTileBomb()) {
 				this.data[x][y].setBomb();
+				i++;
 			}
 		}
-		countNeighbours();
+		
+		for (i = 0; i < this.data[0].length; i++) {
+			for (int j = 0; j < this.data.length; j++) {
+				countNeighbours(j, i);
+			}
+		}
 	}
 	
-	public void countNeighbours() {
+	public void countNeighbours(int j, int i) {
 		int x, y;
-		for (int i = 0; i < this.data[0].length; i++) {
-			for (int j = 0; j < this.data.length; j++) {
-				int count = 0;
-				for (int iOffset = -1; iOffset <= 1; iOffset++) {
-					y = (i + iOffset) < this.data[0].length ? i + iOffset : -1;
-					for (int jOffset = -1; jOffset <= 1; jOffset++) {
-						x = (j + jOffset) < this.data.length ? j + jOffset : -1;
-						if (x > -1 && y > -1) {
-							count += this.data[x][y].isTileBomb() ? 1 : 0;
-						}
-					}
+		int count = 0;
+
+		for (int iOffset = -1; iOffset <= 1; iOffset++) {
+			y = (i + iOffset) < this.data[0].length ? i + iOffset : -1;
+			for (int jOffset = -1; jOffset <= 1; jOffset++) {
+				x = (j + jOffset) < this.data.length ? j + jOffset : -1;	
+				if (x > -1 && y > -1) {
+					count += this.data[x][y].isTileBomb() ? 1 : 0;
 				}
-				this.data[j][i].setNeighbours(count);
 			}
 		}
+		this.data[j][i].setNeighbours(count);
 	}
 	
 	public String toString() {
