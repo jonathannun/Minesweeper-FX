@@ -6,7 +6,7 @@ public class Board {
 		
 		for (int i = 0; i < heightOfBoard; i++) {
 			for (int j = 0; j < widthOfBoard; j++) {
-				this.data[j][i] = new Tile(j, i);
+				this.data[j][i] = new Tile();
 			}
 		}
 	}
@@ -17,13 +17,17 @@ public class Board {
 			x = (int) (Math.random() * this.data.length);
 			y = (int) (Math.random() * this.data[0].length);
 			
-			if (this.data[x][y].bombOnTile()) {
+			if (this.data[x][y].isTileBomb()) {
 				i--;
 			} else {
 				this.data[x][y].setBomb();
 			}
 		}
-		
+		countNeighbours();
+	}
+	
+	public void countNeighbours() {
+		int x, y;
 		for (int i = 0; i < this.data[0].length; i++) {
 			for (int j = 0; j < this.data.length; j++) {
 				int count = 0;
@@ -32,7 +36,7 @@ public class Board {
 					for (int jOffset = -1; jOffset <= 1; jOffset++) {
 						x = (j + jOffset) < this.data.length ? j + jOffset : -1;
 						if (x > -1 && y > -1) {
-							count += this.data[x][y].bombOnTile() ? 1 : 0;
+							count += this.data[x][y].isTileBomb() ? 1 : 0;
 						}
 					}
 				}
@@ -45,7 +49,7 @@ public class Board {
 		String out = "";
 		for (int i = 0; i < this.data[0].length; i++) {
 			for (int j = 0; j < this.data.length; j++) {
-				out += this.data[j][i].bombOnTile() ? "X" : this.data[j][i].getNeighbours();
+				out += this.data[j][i].isTileBomb() ? "X" : this.data[j][i].getNeighbours();
 			}
 			out += "\n";
 		}
