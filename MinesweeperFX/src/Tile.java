@@ -15,7 +15,11 @@ public class Tile {
 		this.isBomb = true;
 	}
 	
-	public void click() {
+	public void setNeighbours(int count) {
+		this.neighbours = count;
+	}
+	
+	public void revealTile() {
 		this.isVisible = true;
 	}
 	

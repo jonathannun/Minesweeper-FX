@@ -13,7 +13,7 @@ public class Board {
 	
 	public void populateBoard(int numberOfBombs) {
 		int x, y;
-		for (int i = 0; i <= numberOfBombs; i++) {
+		for (int i = 0; i < numberOfBombs; i++) {
 			x = (int) (Math.random() * this.data.length);
 			y = (int) (Math.random() * this.data[0].length);
 			
@@ -23,13 +23,32 @@ public class Board {
 				this.data[x][y].setBomb();
 			}
 		}
+		
+		for (int i = 0; i < this.data[0].length; i++) {
+			for (int j = 0; j < this.data.length; j++) {
+				int count = 0;
+				for (int iOffset = -1; iOffset <= 1; iOffset++) {
+					y = (i + iOffset) >= 0 ? i + iOffset : -1;
+					y = (i + iOffset) < this.data[0].length ? y : -1;
+					for (int jOffset = -1; jOffset <= 1; jOffset++) {
+						x = (j + jOffset) >= 0 ? j + jOffset : -1;
+						x = (j + jOffset) < this.data.length ? x : -1;
+						
+						if (x != -1 && y != -1) {
+							count += this.data[x][y].bombOnTile() ? 1 : 0;
+						}
+					}
+				}
+				this.data[j][i].setNeighbours(count);
+			}
+		}
 	}
 	
 	public String toString() {
 		String out = "";
 		for (int i = 0; i < this.data[0].length; i++) {
 			for (int j = 0; j < this.data.length; j++) {
-				out += this.data[j][i].bombOnTile() ? "X" : "-";
+				out += this.data[j][i].bombOnTile() ? "X" : this.data[j][i].getNeighbours();
 			}
 			out += "\n";
 		}
