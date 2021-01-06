@@ -28,13 +28,10 @@ public class Board {
 			for (int j = 0; j < this.data.length; j++) {
 				int count = 0;
 				for (int iOffset = -1; iOffset <= 1; iOffset++) {
-					y = (i + iOffset) >= 0 ? i + iOffset : -1;
-					y = (i + iOffset) < this.data[0].length ? y : -1;
+					y = (i + iOffset) < this.data[0].length ? i + iOffset : -1;
 					for (int jOffset = -1; jOffset <= 1; jOffset++) {
-						x = (j + jOffset) >= 0 ? j + jOffset : -1;
-						x = (j + jOffset) < this.data.length ? x : -1;
-						
-						if (x != -1 && y != -1) {
+						x = (j + jOffset) < this.data.length ? j + jOffset : -1;
+						if (x > -1 && y > -1) {
 							count += this.data[x][y].bombOnTile() ? 1 : 0;
 						}
 					}
