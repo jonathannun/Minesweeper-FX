@@ -1,5 +1,5 @@
 public class Board {
-	private Tile[][] data;																			//Two-dimensional Tile-array
+	public Tile[][] data;																			//Two-dimensional Tile-array
 	
 	public Board(int widthOfBoard, int heightOfBoard) {
 		this.data = new Tile[widthOfBoard][heightOfBoard];											//Initializes null object-array 
