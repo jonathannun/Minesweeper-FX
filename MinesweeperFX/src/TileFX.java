@@ -4,7 +4,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 public class TileFX extends StackPane{
-	private Rectangle tileBorder = new Rectangle(Minesweeper.tileSize - 1, Minesweeper.tileSize - 1);
+	private Rectangle tileBorder = new Rectangle(Minesweeper.getTileSize() - 1, Minesweeper.getTileSize() - 1);
 	private Text tileText = new Text();
 	
 	public TileFX(int x, int y) {
@@ -16,13 +16,13 @@ public class TileFX extends StackPane{
 		
 		getChildren().addAll(tileBorder, tileText);
 		
-		setTranslateX(x * Minesweeper.tileSize);
-		setTranslateY(y * Minesweeper.tileSize);
+		setTranslateX(x * Minesweeper.getTileSize());
+		setTranslateY(y * Minesweeper.getTileSize());
 		
 		setOnMouseClicked(e -> {
 			switch (e.getButton()) {
 			case PRIMARY:
-				update(x, y);
+				Controller.tileEvent(x, y);
 				break;
 			case SECONDARY:
 				setFlag();
@@ -36,11 +36,6 @@ public class TileFX extends StackPane{
 	}
 	
 	public void update(int x, int y) {
-		if (Minesweeper.game.data[x][y].isTileVisible()) {
-			return;
-		}
-		
-		Minesweeper.game.data[x][y].revealTile();
 		tileText.setVisible(Minesweeper.game.data[x][y].isTileVisible());
 		tileBorder.setFill(Minesweeper.game.data[x][y].isTileVisible() ? null : Color.LIGHTGRAY);
 	}

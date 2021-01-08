@@ -31,6 +31,25 @@ public class Board {
 		}
 	}
 	
+	public void revealEmpty(int j, int i) {
+		int x, y;
+		for (int iOffset = -1; iOffset <= 1; iOffset++) {
+			y = (i + iOffset) < this.data[0].length ? i + iOffset : -1;		
+			for (int jOffset = -1; jOffset <= 1; jOffset++) {
+				x = (j + jOffset) < this.data.length ? j + jOffset : -1;
+				if (x > -1 && y > -1 && !this.data[j][i].isTileBomb() && !this.data[x][y].isTileVisible()) {
+					if (this.data[j][i].getNeighbours() == 0) {
+						this.data[x][y].revealTile();
+						System.out.println(x + " : " + y);
+					}
+					if (this.data[x][y].getNeighbours() == 0) {
+						revealEmpty(x, y);
+					}
+				}
+			}
+		}
+	}
+	
 	public void countNeighbours(int j, int i) {
 		int x, y;
 		int count = 0;
