@@ -47,6 +47,11 @@ public class Board {
 		this.data[j][i].setNeighbours(count);														//Update object
 	}
 	
+	public Tile getTile(int x, int y) 
+	{
+		return data[x][y];
+	}
+	
 	public String toString() {																		//Temporary toString method for troubleshooting
 		String out = "";
 		for (int i = 0; i < this.data[0].length; i++) {
