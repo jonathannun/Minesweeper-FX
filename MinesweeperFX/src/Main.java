@@ -23,7 +23,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage prim) throws Exception {
 		level = new Board(sizeX,sizeY);
-		level.populateBoard(20);
+		level.populateBoard(50);
 		
 		window = prim;
 		window.setTitle("test");
