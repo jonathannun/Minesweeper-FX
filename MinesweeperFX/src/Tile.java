@@ -1,5 +1,6 @@
 public class Tile {
 	private Boolean isBomb, isVisible;
+	private boolean hasFlag; 
 	private int neighbours;
 	
 	public Tile() {																					//Constructs empty tile
@@ -30,5 +31,13 @@ public class Tile {
 	
 	public int getNeighbours() {																	//Return int value of number of adjacent bombs
 		return this.neighbours;
+	}
+
+	public boolean getHasFlag() {
+		return hasFlag;
+	}
+
+	public void setHasFlag(boolean hasFlag) {
+		this.hasFlag = hasFlag;
 	}
 }
