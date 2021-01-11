@@ -1,5 +1,5 @@
 public class Board {
-	private Tile[][] data;																			//Two-dimensional Tile-array
+	public Tile[][] data;																			//Two-dimensional Tile-array
 	
 	public Board(int widthOfBoard, int heightOfBoard) {
 		this.data = new Tile[widthOfBoard][heightOfBoard];											//Initializes null object-array 
@@ -27,6 +27,25 @@ public class Board {
 		for (i = 0; i < this.data[0].length; i++) {
 			for (int j = 0; j < this.data.length; j++) {
 				countNeighbours(j, i);																//Counts number of bombs adjacent to tile
+			}
+		}
+	}
+	
+	public void revealEmpty(int j, int i) {
+		int x, y;
+		for (int iOffset = -1; iOffset <= 1; iOffset++) {
+			y = (i + iOffset) < this.data[0].length ? i + iOffset : -1;		
+			for (int jOffset = -1; jOffset <= 1; jOffset++) {
+				x = (j + jOffset) < this.data.length ? j + jOffset : -1;
+				if (x > -1 && y > -1 && !this.data[j][i].isTileBomb() && !this.data[x][y].isTileVisible()) {
+					if (this.data[j][i].getNeighbours() == 0) {
+						this.data[x][y].revealTile();
+						System.out.println(x + " : " + y);
+					}
+					if (this.data[x][y].getNeighbours() == 0) {
+						revealEmpty(x, y);
+					}
+				}
 			}
 		}
 	}
