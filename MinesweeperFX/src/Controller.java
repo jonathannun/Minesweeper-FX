@@ -1,3 +1,4 @@
+import javafx.scene.input.MouseEvent;
 
 public class Controller {
 	
@@ -10,4 +11,9 @@ public class Controller {
 			}
 		}
 	}
+	
+	public static void handle(MouseEvent event) {
+		System.out.println(event.getX());
+	}
+	
 }
