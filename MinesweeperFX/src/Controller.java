@@ -1,6 +1,7 @@
 public class Controller {
 	
 	public static void tileEvent(int x, int y) {
+		
 		Minesweeper.game.data[x][y].revealTile();
 		Minesweeper.game.revealEmpty(x, y);
 		for (int i = 0; i < Minesweeper.game.data[0].length; i++) {
@@ -29,11 +30,14 @@ public class Controller {
 	}
 	
 	public static boolean setFlag(int x, int y) {
+		
 		if(!Minesweeper.game.data[x][y].getHasFlag()) {
 			Minesweeper.game.data[x][y].setHasFlag(true);
+			TileFX.counter++;
 			return false;
 		}else {
 			Minesweeper.game.data[x][y].setHasFlag(false);
+			TileFX.counter--;
 			return true;
 		}
 	}
@@ -41,5 +45,7 @@ public class Controller {
 	public static boolean hasFlag(int x, int y) {
 		return Minesweeper.game.data[x][y].getHasFlag();
 	}
+	
+	
 	
 }

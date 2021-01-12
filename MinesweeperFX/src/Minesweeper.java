@@ -1,37 +1,74 @@
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.ImageView;
+import javafx.application.Application;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Minesweeper extends Application {
 	private static final int tileSize = 40;
-	private static final int windowWidth = 800;
-	private static final int windowHeight = 600;
+	private static int width = 20;
+	private static int height = 15;
+	public static int mines = 50;
+	private static int windowWidth = width*tileSize;
+	private static int windowHeight = height*tileSize;
+	public static Label counter = new Label("Reamining flags : " + mines);
 	
-	public static Board game = new Board(windowWidth / tileSize, windowHeight / tileSize);
-	public static TileFX[][] grid = new TileFX[windowWidth / tileSize][windowHeight / tileSize];
+	
+	static MenuBar m = createMenuBar();
+	
+	public static Board game = new Board(width, height);
+	public static TileFX[][] grid = new TileFX[width][height];
 	
 	@Override
 	public void start(Stage stage) {
 		Scene scene = new Scene(createGame());
 		System.out.println("start");
+		m.prefWidthProperty().bind(stage.widthProperty());
 		stage.setScene(scene);
+		
 		stage.show();
 	}
 	
-	private Parent createGame() {
-		Pane root = new Pane();
-		root.setPrefSize(windowWidth, windowHeight);
-		game.populateBoard(50);
+	private static Parent createGame() {
+		BorderPane root = new BorderPane();
+		Pane pane = new Pane();
+		pane.setPrefSize(windowWidth, windowHeight);
+		game.populateBoard(mines);
 		
-		for (int i = 0; i < windowHeight / tileSize; i++) {
-			for (int j = 0; j < windowWidth / tileSize; j++) {
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j <  width; j++) {
 				TileFX tile = new TileFX(j, i);
 				grid[j][i] = tile;
-				root.getChildren().add(tile);
+				pane.getChildren().add(tile);
 			}
 		}
+		
+		AnchorPane Anchor = new AnchorPane();
+		
+		ImageView flag = new ImageView("Images/Flag.png");
+		counter.setGraphic(flag);
+		flag.setFitHeight(20);
+		flag.setFitWidth(20);
+
+		AnchorPane.setLeftAnchor(counter, Double.valueOf(windowWidth-200));
+		
+		Anchor.getChildren().addAll(m,counter);
+		
+		root.setCenter(pane);
+		root.setTop(Anchor);
 		
 		return root;
 	}
@@ -43,4 +80,61 @@ public class Minesweeper extends Application {
 	public static int getTileSize() {
 		return tileSize;
 	}
+	public static MenuBar createMenuBar() {
+		//Menu
+				Menu menu = new Menu("Difficulty Level...");
+				Menu timeButton = new Menu("Time");
+				Menu mineFallButton = new Menu("MineFall");
+				
+				//Create menuItems for Difficult settings
+				RadioMenuItem m1 = new RadioMenuItem("Modify...");
+				ToggleGroup difficultyLevelGroup = new ToggleGroup(); 
+				
+				//Pop-up window - Modify Level
+					m1.setOnAction(e -> {
+							PopUpBox.show();
+							int[] widthLengthMines = PopUpBox.show();
+							if(widthLengthMines[0]==0||widthLengthMines[1]==0||widthLengthMines[2]==0) {
+								System.out.println("empty");
+							}
+							else {
+								width = widthLengthMines[0] ;
+								height = widthLengthMines[1];
+								mines = widthLengthMines[2];
+							}
+							
+						});
+		
+				
+				RadioMenuItem easy = new RadioMenuItem("Easy");
+				easy.setOnAction(e -> System.out.println("easy"));
+				RadioMenuItem medium = new RadioMenuItem("Medium");
+				medium.setOnAction(e -> System.out.println("medium"));
+				RadioMenuItem hard = new RadioMenuItem("Hard");
+				hard.setOnAction(e -> System.out.println("hard"));
+				MenuItem restart = new MenuItem("Restart");
+				
+				//Add to the ToogleGroup
+				m1.setToggleGroup(difficultyLevelGroup);
+				easy.setToggleGroup(difficultyLevelGroup);
+				medium.setToggleGroup(difficultyLevelGroup);
+				hard.setToggleGroup(difficultyLevelGroup);
+				
+				//Add menu-items to the menu object
+				menu.getItems().addAll(m1,easy,medium,hard,restart);
+				
+				//Restart
+				restart.setOnAction(e->{
+					
+					System.out.println("restart");
+					createGame();
+					});
+				//MenuBar
+				MenuBar menuBar = new MenuBar();
+				
+				//Add the menu full of items to the menu-bar
+				menuBar.getMenus().addAll(menu ,timeButton, mineFallButton);
+				return menuBar;
+	}
+	
 }

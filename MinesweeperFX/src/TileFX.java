@@ -7,6 +7,7 @@ import javafx.scene.text.Text;
 public class TileFX extends StackPane{
 	private Rectangle tileBorder;
 	private Text tileText = new Text();
+	public static int counter;
 	ImageView mine = new ImageView("Images/Mine.png");
 	ImageView flag = new ImageView("Images/Flag.png");
 	
@@ -38,6 +39,7 @@ public class TileFX extends StackPane{
 				break;
 			case SECONDARY:
 				setFlag(x,y);
+				setCounter();
 				break;
 			}
 		});
@@ -61,4 +63,9 @@ public class TileFX extends StackPane{
 		tileText.setVisible(Controller.isVisable(x, y));
 		tileBorder.setFill(Controller.isVisable(x, y) ? null : Color.LIGHTGRAY);
 	}
+	
+	public static void setCounter() {
+		Minesweeper.counter.setText("Remaining flags : " + String.valueOf( Minesweeper.mines-counter));
+	}
 }
+
