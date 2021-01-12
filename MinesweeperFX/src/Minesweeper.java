@@ -55,17 +55,18 @@ public class Minesweeper extends Application {
 				pane.getChildren().add(tile);
 			}
 		}
-		
+		Timer timer = new Timer();
 		AnchorPane Anchor = new AnchorPane();
 		
 		ImageView flag = new ImageView("Images/Flag.png");
 		counter.setGraphic(flag);
 		flag.setFitHeight(20);
 		flag.setFitWidth(20);
-
+		
+		AnchorPane.setLeftAnchor(timer, Double.valueOf(windowWidth-250));
 		AnchorPane.setLeftAnchor(counter, Double.valueOf(windowWidth-200));
 		
-		Anchor.getChildren().addAll(m,counter);
+		Anchor.getChildren().addAll(m,counter,timer);
 		
 		root.setCenter(pane);
 		root.setTop(Anchor);
