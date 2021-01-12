@@ -25,7 +25,7 @@ public class Minesweeper extends Application {
 	private static int windowWidth = width*tileSize;
 	private static int windowHeight = height*tileSize;
 	public static Label counter = new Label("Reamining flags : " + mines);
-	
+	public static Pane pane = new Pane();
 	
 	static MenuBar m = createMenuBar();
 	
@@ -44,8 +44,8 @@ public class Minesweeper extends Application {
 	
 	private static Parent createGame() {
 		BorderPane root = new BorderPane();
-		Pane pane = new Pane();
-		pane.setPrefSize(windowWidth, windowHeight);
+		
+		pane.setPrefSize(windowWidth-16, windowHeight-11);
 		game.populateBoard(mines);
 		
 		for (int i = 0; i < height; i++) {
@@ -58,15 +58,19 @@ public class Minesweeper extends Application {
 		Timer timer = new Timer();
 		AnchorPane Anchor = new AnchorPane();
 		
+		Button restartButton = new Button("Restart");
+		restartButton.setOnAction(e-> restartGame());
+		
 		ImageView flag = new ImageView("Images/Flag.png");
 		counter.setGraphic(flag);
 		flag.setFitHeight(20);
 		flag.setFitWidth(20);
 		
+		AnchorPane.setLeftAnchor(restartButton, Double.valueOf(windowWidth/2));
 		AnchorPane.setLeftAnchor(timer, Double.valueOf(windowWidth-250));
 		AnchorPane.setLeftAnchor(counter, Double.valueOf(windowWidth-200));
 		
-		Anchor.getChildren().addAll(m,counter,timer);
+		Anchor.getChildren().addAll(m,counter,timer,restartButton);
 		
 		root.setCenter(pane);
 		root.setTop(Anchor);
@@ -103,8 +107,9 @@ public class Minesweeper extends Application {
 								width = widthLengthMines[0] ;
 								height = widthLengthMines[1];
 								mines = widthLengthMines[2];
-								
+								restartGame();
 							}
+							
 						});
 		
 				
@@ -124,19 +129,26 @@ public class Minesweeper extends Application {
 				
 				//Add menu-items to the menu object
 				menu.getItems().addAll(m1,easy,medium,hard,restart);
-				
-				//Restart
-				restart.setOnAction(e->{
-					
-					System.out.println("restart");
-					createGame();
-					});
+
 				//MenuBar
 				MenuBar menuBar = new MenuBar();
 				
 				//Add the menu full of items to the menu-bar
 				menuBar.getMenus().addAll(menu ,timeButton, mineFallButton);
 				return menuBar;
+	}
+	public static void restartGame() {
+		Minesweeper.game = new Board(width, height);
+		game.populateBoard(mines);
+		grid = new TileFX[width][height];
+		
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j <  width; j++) {
+				TileFX tile = new TileFX(j, i);
+				grid[j][i] = tile;
+				pane.getChildren().add(tile);
+			}
+		}
 	}
 	
 }
