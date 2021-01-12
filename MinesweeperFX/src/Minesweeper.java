@@ -98,10 +98,12 @@ public class Minesweeper extends Application {
 							if(widthLengthMines[0]==0||widthLengthMines[1]==0||widthLengthMines[2]==0) {
 								System.out.println("empty");
 							}
+							
 							else {
 								width = widthLengthMines[0] ;
 								height = widthLengthMines[1];
 								mines = widthLengthMines[2];
+								
 							}
 							
 						});
