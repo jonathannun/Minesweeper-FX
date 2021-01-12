@@ -1,5 +1,6 @@
 public class Board {
 	public Tile[][] data;																			//Two-dimensional Tile-array
+	public boolean GameOver;
 	
 	public Board(int widthOfBoard, int heightOfBoard) {
 		this.data = new Tile[widthOfBoard][heightOfBoard];											//Initializes null object-array 
@@ -32,6 +33,7 @@ public class Board {
 	}
 	
 	public void revealEmpty(int j, int i) {
+		if(this.data[j][i].isTileBomb()) {this.GameOver = true; System.out.println("gameOver");}
 		int x, y;
 		for (int iOffset = -1; iOffset <= 1; iOffset++) {
 			y = (i + iOffset) < this.data[0].length ? i + iOffset : -1;		
@@ -39,10 +41,16 @@ public class Board {
 				x = (j + jOffset) < this.data.length ? j + jOffset : -1;
 				if (x > -1 && y > -1 && !this.data[j][i].isTileBomb() && !this.data[x][y].isTileVisible()) {
 					if (this.data[j][i].getNeighbours() == 0) {
+						if(this.data[x][y].getHasFlag()) {
+							continue;
+						}
 						this.data[x][y].revealTile();
 						System.out.println(x + " : " + y);
 					}
 					if (this.data[x][y].getNeighbours() == 0) {
+						if(this.data[x][y].getHasFlag()) {
+							continue;
+						}
 						revealEmpty(x, y);
 					}
 				}

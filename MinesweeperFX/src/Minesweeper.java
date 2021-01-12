@@ -105,7 +105,6 @@ public class Minesweeper extends Application {
 								mines = widthLengthMines[2];
 								
 							}
-							
 						});
 		
 				
