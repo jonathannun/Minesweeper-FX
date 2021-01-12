@@ -1,6 +1,7 @@
 public class Controller {
 	
 	public static void tileEvent(int x, int y) {
+		if (Minesweeper.game.gameOver) {return;} //stop game
 		Minesweeper.game.data[x][y].revealTile();
 		Minesweeper.game.revealEmpty(x, y);
 		for (int i = 0; i < Minesweeper.game.data[0].length; i++) {
