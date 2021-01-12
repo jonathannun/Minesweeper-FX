@@ -18,10 +18,10 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Minesweeper extends Application {
-	private static final int tileSize = 40;
-	private static int width = 20;
-	private static int height = 15;
-	public static int mines = 50;
+	private static final int tileSize = 20;
+	private static int width = 60;
+	private static int height = 20;
+	public static int mines = 200;
 	private static int windowWidth = width*tileSize;
 	private static int windowHeight = height*tileSize;
 	public static Label counter = new Label("Reamining flags : " + mines);
@@ -141,6 +141,7 @@ public class Minesweeper extends Application {
 		Minesweeper.game = new Board(width, height);
 		game.populateBoard(mines);
 		grid = new TileFX[width][height];
+		pane.getChildren().removeAll();
 		
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j <  width; j++) {
@@ -150,5 +151,4 @@ public class Minesweeper extends Application {
 			}
 		}
 	}
-	
 }

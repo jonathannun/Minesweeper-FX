@@ -1,9 +1,10 @@
 /Board.class
 /Controller.class
+/ErrorMessage.class
+/Images/
 /Minesweeper.class
+/PopUpBox.class
 /Tile.class
 /TileFX.class
-/Images/
 /Timer.class
-/PopUpBox.class
-/ErrorMessage.class
+/View.class
