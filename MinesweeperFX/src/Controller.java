@@ -23,20 +23,69 @@ public class Controller {
 	}
 	
 	public static int getTileSize() {
-		return Minesweeper.getTileSize() - 1;
+		return Board.getTilesize();
 	}
 	
 	public static boolean isVisable(int x, int y) {
 		return Minesweeper.game.data[x][y].isTileVisible();
 	}
 	
+	//MinewSweeper fetches
+	public static int getWidth() {
+		return Board.getWidth();
+	}
+
+	public static void setWidth(int width) {
+		Board.setWidth(width);
+	}
+
+	public static int getHeight() {
+		return Board.getHeight();
+	}
+
+	public static void setHeight(int height) {
+		Board.setHeight(height);
+	}
+
+	public static int getWindowWidth() {
+		return Board.getWindowWidth();
+	}
+
+	public static void setWindowWidth(int windowWidth) {
+		Board.setWindowWidth(windowWidth);
+	}
+
+	public static int getWindowHeight() {
+		return Board.getWindowHeight();
+	}
+
+	public static void setWindowHeight(int windowHeight) {
+		Board.setWindowHeight(windowHeight);
+	}
+	
+	public static int getMines() {
+		return Board.getMines();
+	}
+	
+	public static void setMines(int mines) {
+		Board.setMines(mines);
+	}
+	
+	public static int getFlagCounter() {
+		return Board.getFlagCounter();
+	}
+
+	public static void setFlagCounter(int flagCounter) {
+		Board.setFlagCounter(flagCounter);
+	}
+	
 	public static void setFlag(int x, int y) {
 		if(!Minesweeper.game.data[x][y].getHasFlag()) {
 			Minesweeper.game.data[x][y].setHasFlag(true);
-			Minesweeper.flagCounter++;
+			setFlagCounter(getFlagCounter()+1);
 		}else {
 			Minesweeper.game.data[x][y].setHasFlag(false);
-			Minesweeper.flagCounter--;
+			setFlagCounter(getFlagCounter()-1);
 		}
 	}
 	

@@ -2,7 +2,24 @@ public class Board {
 	public Tile[][] data;																			//Two-dimensional Tile-array
 	public boolean GameOver;
 	
+	private static int tileSize = 20;
+	private static int mines = 15;
+	private static int width = 60;
+	private static int height = 20;
+	private static int windowWidth;
+	private static int windowHeight;
+	private static int flagCounter;
+	
 	public Board(int widthOfBoard, int heightOfBoard) {
+		if(tileSize*width < 550) {
+			tileSize = 550/width;
+		} else if(height>70) {
+			tileSize = 8;
+		}
+			else if (width > 75) {
+			tileSize = 1400/width;
+		}
+		
 		this.data = new Tile[widthOfBoard][heightOfBoard];											//Initializes null object-array 
 		
 		for (int i = 0; i < heightOfBoard; i++) {
@@ -10,18 +27,21 @@ public class Board {
 				this.data[j][i] = new Tile();														//Fills object-array
 			}
 		}
+		
+		windowWidth = width*tileSize<550 ? 550 : width*tileSize;
+		windowHeight = height*tileSize;
 	}
 	
-	public void populateBoard(int numberOfBombs) {
+	public void populateBoard() {
 		int x, y;
 		int i = 0;
-		while(i < numberOfBombs) {																	//'Pool' of bombs
+		while(i < mines) {																	//'Pool' of bombs
 			x = (int) (Math.random() * this.data.length);											//Coordinates for bomb chosen randomly
 			y = (int) (Math.random() * this.data[0].length);
 			
 			if (!this.data[x][y].isTileBomb()) {													//Bomb placed at coordinates if empty
 				this.data[x][y].setBomb();
-				i++;																				//Increment
+				i++; 																				//Increment
 			}
 		}
 		
@@ -45,7 +65,6 @@ public class Board {
 							continue;
 						}
 						this.data[x][y].revealTile();
-						System.out.println(x + " : " + y);
 					}
 					if (this.data[x][y].getNeighbours() == 0) {
 						if(this.data[x][y].getHasFlag()) {
@@ -84,4 +103,57 @@ public class Board {
 		}
 		return out;
 	}
+
+	public static int getWidth() {
+		return width;
+	}
+
+	public static void setWidth(int width) {
+		Board.width = width;
+	}
+
+	public static int getHeight() {
+		return height;
+	}
+
+	public static void setHeight(int height) {
+		Board.height = height;
+	}
+
+	public static int getWindowWidth() {
+		return windowWidth;
+	}
+
+	public static void setWindowWidth(int windowWidth) {
+		Board.windowWidth = windowWidth;
+	}
+
+	public static int getWindowHeight() {
+		return windowHeight;
+	}
+
+	public static void setWindowHeight(int windowHeight) {
+		Board.windowHeight = windowHeight;
+	}
+	
+	public static int getMines() {
+		return mines;
+	}
+
+	public static void setMines(int mines) {
+		Board.mines = mines;
+	}
+
+	public static int getTilesize() {
+		return tileSize;
+	}
+
+	public static int getFlagCounter() {
+		return flagCounter;
+	}
+
+	public static void setFlagCounter(int flagCounter) {
+		Board.flagCounter = flagCounter;
+	}
+	
 }

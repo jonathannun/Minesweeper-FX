@@ -12,13 +12,13 @@ public class TileFX extends StackPane{
 	ImageView flag = new ImageView("Images/Flag.png");
 	
 	public TileFX(int x, int y) {
-		tileBorder = new Rectangle(Controller.getTileSize(), Controller.getTileSize());
+		tileBorder = new Rectangle(Controller.getTileSize()-1, Controller.getTileSize()-1);
 		tileBorder.setStroke(Color.GRAY);
 		tileBorder.setFill(Color.LIGHTGRAY);
 		
 		if(Controller.isBomb(x, y)) {
-			mine.setFitHeight(Controller.getTileSize());
-			mine.setFitWidth(Controller.getTileSize());
+			mine.setFitHeight(Controller.getTileSize()-1);
+			mine.setFitWidth(Controller.getTileSize()-1);
 			getChildren().add(mine);
 		} else {
 			tileText.setText(Controller.getNeighbours(x, y));
@@ -27,32 +27,16 @@ public class TileFX extends StackPane{
 		
 		getChildren().add(tileBorder);
 		
-		setTranslateX(x * Controller.getTileSize());
-		setTranslateY(y * Controller.getTileSize());
-		
-		/*
-		setOnMouseClicked(e -> {
-			switch (e.getButton()) {
-			case PRIMARY:
-				if(!Controller.hasFlag(x, y)) {
-					Controller.tileEvent(x, y);
-				} 
-				break;
-			case SECONDARY:
-				setFlag(x,y);
-				setCounter();
-				break;
-			}
-		});
-		*/
+		setTranslateX(x* Controller.getTileSize());
+		setTranslateY(y* Controller.getTileSize());
 		
 		setOnMouseClicked(e->Controller.click(e.getButton(), x,y));
 	}
 	
 	public void setFlag(int x, int y) {
 		if(Controller.hasFlag(x,y)) {
-			flag.setFitHeight(Controller.getTileSize());
-			flag.setFitWidth(Controller.getTileSize());
+			flag.setFitHeight(Controller.getTileSize()-1);
+			flag.setFitWidth(Controller.getTileSize()-1);
 			getChildren().add(flag);
 		} else {
 			for(int i = 0; i < getChildren().size(); i++) {
@@ -68,8 +52,10 @@ public class TileFX extends StackPane{
 		tileBorder.setFill(Controller.isVisable(x, y) ? null : Color.LIGHTGRAY);
 	}
 	
+	
 	public static void setCounter() {
-		Minesweeper.counter.setText("Remaining flags : " + String.valueOf( Minesweeper.mines-Minesweeper.flagCounter));
+		Minesweeper.counter.setText("Remaining flags : " + String.valueOf(Controller.getMines()-Controller.getFlagCounter()));
 	}
+	
 }
 

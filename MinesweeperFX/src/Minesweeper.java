@@ -14,28 +14,24 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Minesweeper extends Application {
-	private static final int tileSize = 20;
-	private static int width = 60;
-	private static int height = 20;
-	public static int mines = 15;
-	private static int windowWidth = width*tileSize;
-	private static int windowHeight = height*tileSize;
-	public static Label counter = new Label("Reamining flags : " + mines);
-	public static int flagCounter;
-	public static Pane pane = new Pane();
+	public static Label counter;
+	public static GridPane pane = new GridPane();
 	private static Stage window;
-	
 	static MenuBar m = createMenuBar();
 	
-	public static Board game = new Board(width, height);
-	public static TileFX[][] grid = new TileFX[width][height];
+	public static Board game;
+	public static TileFX[][] grid;
 	
 	@Override
 	public void start(Stage stage) {
+		counter = new Label("Reamining flags : " + Controller.getMines());
+		game = new Board(Controller.getWidth(),Controller.getHeight());
+		grid = new TileFX[Controller.getWidth()][Controller.getHeight()];
 		window = stage;
 		Scene scene = new Scene(createGame());
 		System.out.println("start");
@@ -47,14 +43,11 @@ public class Minesweeper extends Application {
 	
 	private static Parent createGame() {
 		BorderPane root = new BorderPane();
+		pane.setPrefSize(Controller.getWindowWidth(), Controller.getWindowHeight());
+		game.populateBoard();
 		
-		windowWidth = width*tileSize<550 ? 550 : width*tileSize;
-		windowHeight = height*tileSize;
-		pane.setPrefSize(windowWidth, windowHeight);
-		game.populateBoard(mines);
-		
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j <  width; j++) {
+		for (int i = 0; i < Controller.getHeight(); i++) {
+			for (int j = 0; j <  Controller.getWidth(); j++) {
 				TileFX tile = new TileFX(j, i);
 				grid[j][i] = tile;
 				pane.getChildren().add(tile);
@@ -71,9 +64,9 @@ public class Minesweeper extends Application {
 		flag.setFitHeight(20);
 		flag.setFitWidth(20);
 		
-		AnchorPane.setLeftAnchor(restartButton, Double.valueOf(windowWidth/2));
-		AnchorPane.setLeftAnchor(timer, Double.valueOf(windowWidth-250));
-		AnchorPane.setLeftAnchor(counter, Double.valueOf(windowWidth-200));
+		AnchorPane.setLeftAnchor(restartButton, Double.valueOf(Controller.getWindowWidth()/2));
+		AnchorPane.setLeftAnchor(timer, Double.valueOf(Controller.getWindowWidth()-250));
+		AnchorPane.setLeftAnchor(counter, Double.valueOf(Controller.getWindowWidth()-200));
 		
 		Anchor.getChildren().addAll(m,counter,timer,restartButton);
 		
@@ -87,9 +80,6 @@ public class Minesweeper extends Application {
 		launch(args);
 	}
 	
-	public static int getTileSize() {
-		return tileSize;
-	}
 	public static MenuBar createMenuBar() {
 		//Menu
 		Menu menu = new Menu("Difficulty Level...");
@@ -109,9 +99,9 @@ public class Minesweeper extends Application {
 				System.out.println("empty");
 			}				
 			else {
-				width = widthLengthMines[0];
-				height = widthLengthMines[1];
-				mines = widthLengthMines[2];
+				Controller.setWidth(widthLengthMines[0]);
+				Controller.setHeight(widthLengthMines[1]);
+				Controller.setMines(widthLengthMines[2]);
 				restartGame();
 			}				
 		});
@@ -141,14 +131,13 @@ public class Minesweeper extends Application {
 		return menuBar;
 	}
 	public static void restartGame() {
-		Minesweeper.game = new Board(width, height);
-		game.populateBoard(mines);
-		grid = new TileFX[width][height];
+		Minesweeper.game = new Board(Controller.getWidth(), Controller.getHeight());
+		grid = new TileFX[Controller.getWidth()][Controller.getHeight()];
 		pane.getChildren().clear();
 		
 		Scene newScene = new Scene(createGame());
-		window.setHeight(windowHeight+50);
-		window.setWidth(windowWidth);
+		window.setHeight(Controller.getWindowHeight()+50);
+		window.setWidth(Controller.getWindowWidth());
 		window.setScene(newScene);
 	}
 }
