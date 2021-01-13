@@ -1,3 +1,5 @@
+import javafx.scene.input.MouseButton;
+
 public class Controller {
 	
 	public static void tileEvent(int x, int y) {
@@ -13,7 +15,6 @@ public class Controller {
 	
 	public static boolean isBomb(int x, int y) {
 		return Minesweeper.game.data[x][y].isTileBomb();
-			
 	}
 	
 	public static String getNeighbours(int x, int y) 
@@ -29,16 +30,13 @@ public class Controller {
 		return Minesweeper.game.data[x][y].isTileVisible();
 	}
 	
-	public static boolean setFlag(int x, int y) {
-		
+	public static void setFlag(int x, int y) {
 		if(!Minesweeper.game.data[x][y].getHasFlag()) {
 			Minesweeper.game.data[x][y].setHasFlag(true);
-			TileFX.counter++;
-			return false;
+			Minesweeper.flagCounter++;
 		}else {
 			Minesweeper.game.data[x][y].setHasFlag(false);
-			TileFX.counter--;
-			return true;
+			Minesweeper.flagCounter--;
 		}
 	}
 	
@@ -46,6 +44,20 @@ public class Controller {
 		return Minesweeper.game.data[x][y].getHasFlag();
 	}
 	
+	public static void click(MouseButton b, int x, int y) {
+		switch (b) {
+		case PRIMARY:
+			if(!Controller.hasFlag(x, y)) {
+				Controller.tileEvent(x, y);
+			} 
+			break;
+		case SECONDARY:
+			setFlag(x,y);
+			Minesweeper.grid[x][y].setFlag(x,y);
+			Minesweeper.grid[x][y].setCounter();
+			break;
+		}
+	}
 	
 	
 }

@@ -7,7 +7,7 @@ import javafx.scene.text.Text;
 public class TileFX extends StackPane{
 	private Rectangle tileBorder;
 	private Text tileText = new Text();
-	public static int counter;
+	
 	ImageView mine = new ImageView("Images/Mine.png");
 	ImageView flag = new ImageView("Images/Flag.png");
 	
@@ -30,6 +30,7 @@ public class TileFX extends StackPane{
 		setTranslateX(x * Controller.getTileSize());
 		setTranslateY(y * Controller.getTileSize());
 		
+		/*
 		setOnMouseClicked(e -> {
 			switch (e.getButton()) {
 			case PRIMARY:
@@ -43,10 +44,13 @@ public class TileFX extends StackPane{
 				break;
 			}
 		});
+		*/
+		
+		setOnMouseClicked(e->Controller.click(e.getButton(), x,y));
 	}
 	
 	public void setFlag(int x, int y) {
-		if(!Controller.setFlag(x,y)) {
+		if(Controller.hasFlag(x,y)) {
 			flag.setFitHeight(Controller.getTileSize());
 			flag.setFitWidth(Controller.getTileSize());
 			getChildren().add(flag);
@@ -65,7 +69,7 @@ public class TileFX extends StackPane{
 	}
 	
 	public static void setCounter() {
-		Minesweeper.counter.setText("Remaining flags : " + String.valueOf( Minesweeper.mines-counter));
+		Minesweeper.counter.setText("Remaining flags : " + String.valueOf( Minesweeper.mines-Minesweeper.flagCounter));
 	}
 }
 

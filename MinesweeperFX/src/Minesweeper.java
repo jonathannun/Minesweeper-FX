@@ -25,6 +25,7 @@ public class Minesweeper extends Application {
 	private static int windowWidth = width*tileSize;
 	private static int windowHeight = height*tileSize;
 	public static Label counter = new Label("Reamining flags : " + mines);
+	public static int flagCounter;
 	public static Pane pane = new Pane();
 	private static Stage window;
 	
