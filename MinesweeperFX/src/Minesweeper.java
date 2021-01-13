@@ -87,61 +87,62 @@ public class Minesweeper extends Application {
 	}
 	public static MenuBar createMenuBar() {
 		//Menu
-				Menu menu = new Menu("Difficulty Level...");
-				Menu timeButton = new Menu("Time");
-				Menu mineFallButton = new Menu("MineFall");
+		Menu menu = new Menu("Difficulty Level...");
+		Menu timeButton = new Menu("Time");
+		Menu mineFallButton = new Menu("MineFall");
 				
-				//Create menuItems for Difficult settings
-				RadioMenuItem m1 = new RadioMenuItem("Modify...");
-				ToggleGroup difficultyLevelGroup = new ToggleGroup(); 
+		//Create menuItems for Difficult settings
+		RadioMenuItem m1 = new RadioMenuItem("Modify...");
+		ToggleGroup difficultyLevelGroup = new ToggleGroup(); 
 				
-				//Pop-up window - Modify Level
-					m1.setOnAction(e -> {
-							PopUpBox.show();
-							int[] widthLengthMines = PopUpBox.show();
-							if(widthLengthMines[0]==0||widthLengthMines[1]==0||widthLengthMines[2]==0) {
-								System.out.println("empty");
-							}
-							
-							else {
-								width = widthLengthMines[0] ;
-								height = widthLengthMines[1];
-								mines = widthLengthMines[2];
-								restartGame();
-							}
-							
-						});
-		
+		//Pop-up window - Modify Level
+		m1.setOnAction(e -> {
+			PopUpBox.show();
+			int[] widthLengthMines = PopUpBox.show();
+			if(widthLengthMines[0]==0||widthLengthMines[1]==0||widthLengthMines[2]==0) 
+			{
+				System.out.println("empty");
+			}				
+			else {
+				width = widthLengthMines[0] ;
+				height = widthLengthMines[1];
+				mines = widthLengthMines[2];
+				restartGame();
+			}				
+		});
 				
-				RadioMenuItem easy = new RadioMenuItem("Easy");
-				easy.setOnAction(e -> System.out.println("easy"));
-				RadioMenuItem medium = new RadioMenuItem("Medium");
-				medium.setOnAction(e -> System.out.println("medium"));
-				RadioMenuItem hard = new RadioMenuItem("Hard");
-				hard.setOnAction(e -> System.out.println("hard"));
-				MenuItem restart = new MenuItem("Restart");
+		RadioMenuItem easy = new RadioMenuItem("Easy");
+		easy.setOnAction(e -> System.out.println("easy"));
+		RadioMenuItem medium = new RadioMenuItem("Medium");
+		medium.setOnAction(e -> System.out.println("medium"));
+		RadioMenuItem hard = new RadioMenuItem("Hard");
+		hard.setOnAction(e -> System.out.println("hard"));
+		MenuItem restart = new MenuItem("Restart");
 				
-				//Add to the ToogleGroup
-				m1.setToggleGroup(difficultyLevelGroup);
-				easy.setToggleGroup(difficultyLevelGroup);
-				medium.setToggleGroup(difficultyLevelGroup);
-				hard.setToggleGroup(difficultyLevelGroup);
+		//Add to the ToogleGroup
+		m1.setToggleGroup(difficultyLevelGroup);
+		easy.setToggleGroup(difficultyLevelGroup);
+		medium.setToggleGroup(difficultyLevelGroup);
+		hard.setToggleGroup(difficultyLevelGroup);
 				
-				//Add menu-items to the menu object
-				menu.getItems().addAll(m1,easy,medium,hard,restart);
+		//Add menu-items to the menu object
+		menu.getItems().addAll(m1,easy,medium,hard,restart);
 
-				//MenuBar
-				MenuBar menuBar = new MenuBar();
-				
-				//Add the menu full of items to the menu-bar
-				menuBar.getMenus().addAll(menu ,timeButton, mineFallButton);
-				return menuBar;
+		//MenuBar
+		MenuBar menuBar = new MenuBar();
+		
+		//Add the menu full of items to the menu-bar
+		menuBar.getMenus().addAll(menu ,timeButton, mineFallButton);
+		return menuBar;
 	}
 	public static void restartGame() {
 		Minesweeper.game = new Board(width, height);
 		game.populateBoard(mines);
 		grid = new TileFX[width][height];
-		pane.getChildren().removeAll();
+		pane.getChildren().clear();
+		windowWidth = width*tileSize;
+		windowHeight = height*tileSize;
+		pane.setPrefSize(windowWidth, windowHeight);
 		
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j <  width; j++) {
