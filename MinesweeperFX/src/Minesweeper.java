@@ -21,11 +21,12 @@ public class Minesweeper extends Application {
 	private static final int tileSize = 20;
 	private static int width = 60;
 	private static int height = 20;
-	public static int mines = 200;
+	public static int mines = 15;
 	private static int windowWidth = width*tileSize;
 	private static int windowHeight = height*tileSize;
 	public static Label counter = new Label("Reamining flags : " + mines);
 	public static Pane pane = new Pane();
+	private static Stage window;
 	
 	static MenuBar m = createMenuBar();
 	
@@ -34,6 +35,7 @@ public class Minesweeper extends Application {
 	
 	@Override
 	public void start(Stage stage) {
+		window = stage;
 		Scene scene = new Scene(createGame());
 		System.out.println("start");
 		m.prefWidthProperty().bind(stage.widthProperty());
@@ -45,7 +47,9 @@ public class Minesweeper extends Application {
 	private static Parent createGame() {
 		BorderPane root = new BorderPane();
 		
-		pane.setPrefSize(windowWidth-16, windowHeight-11);
+		windowWidth = width*tileSize<550 ? 550 : width*tileSize;
+		windowHeight = height*tileSize;
+		pane.setPrefSize(windowWidth, windowHeight);
 		game.populateBoard(mines);
 		
 		for (int i = 0; i < height; i++) {
@@ -104,7 +108,7 @@ public class Minesweeper extends Application {
 				System.out.println("empty");
 			}				
 			else {
-				width = widthLengthMines[0] ;
+				width = widthLengthMines[0];
 				height = widthLengthMines[1];
 				mines = widthLengthMines[2];
 				restartGame();
@@ -140,16 +144,10 @@ public class Minesweeper extends Application {
 		game.populateBoard(mines);
 		grid = new TileFX[width][height];
 		pane.getChildren().clear();
-		windowWidth = width*tileSize;
-		windowHeight = height*tileSize;
-		pane.setPrefSize(windowWidth, windowHeight);
 		
-		for (int i = 0; i < height; i++) {
-			for (int j = 0; j <  width; j++) {
-				TileFX tile = new TileFX(j, i);
-				grid[j][i] = tile;
-				pane.getChildren().add(tile);
-			}
-		}
+		Scene newScene = new Scene(createGame());
+		window.setHeight(windowHeight+50);
+		window.setWidth(windowWidth);
+		window.setScene(newScene);
 	}
 }
