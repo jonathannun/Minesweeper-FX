@@ -25,7 +25,7 @@ public class View {
 	private Label counter;
 	private BorderPane window;
 	
-	private static int tileSize = 20;
+	private static int tileSize = 10;
 	private static IntegerProperty width;
 	private static IntegerProperty height;
 	
@@ -38,12 +38,12 @@ public class View {
 		ImageView flag = new ImageView("Images/flag.png");
 		
 		public Tile(int x, int y) {																	//Constructor.
-			this.tile = new Rectangle(tileSize - 1, tileSize - 1);									//Sets size of rectangle.
+			this.tile = new Rectangle(tileSize, tileSize);											//Sets size of rectangle.
 			this.text = new Text();																	//Initializes empty text object.
 			
 			if (model.getTile(x, y).bombOnTile()) {													//Sets string value of text object.
-				mine.setFitHeight(tileSize - 1);
-				mine.setFitWidth(tileSize - 1);
+				mine.setFitHeight(tileSize);
+				mine.setFitWidth(tileSize);
 				getChildren().add(mine);
 			} else {
 				this.text.setText(controller.getNeighbours(x, y) == 0 ? "" : "" + controller.getNeighbours(x, y));
@@ -70,7 +70,8 @@ public class View {
 				}
 			});
 			
-			getChildren().addAll(this.text, this.tile);												//Adds nodes to tile.
+			getChildren().add(this.text);															//Adds nodes to tile.
+			getChildren().add(this.tile);
 			
 			setOnMouseClicked(e -> {																//Handles mouse-click event.
 				switch (e.getButton()) {

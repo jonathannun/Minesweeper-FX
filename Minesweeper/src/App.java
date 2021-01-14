@@ -6,7 +6,7 @@ public class App extends Application{
 
 	@Override
 	public void start(Stage stage) {
-		Model model = new Model(20, 20, 40);
+		Model model = new Model(40, 40, 40);
 		Controller controller = new Controller(model);
 		View view = new View(model, controller);
 		
