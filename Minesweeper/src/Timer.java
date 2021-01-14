@@ -9,6 +9,7 @@ public class Timer extends Pane {
 	private int minute = 0;
 	private int second = 0;
 	private String clock = "";
+	private boolean startCounter = false;
 	
 	Label label = new Label(String.format("%02d:%02d", minute,second));
 	
@@ -20,6 +21,9 @@ public class Timer extends Pane {
 	}
 
 	public void counter() {
+		if(!startCounter) {
+			return;
+		}
 		if(second >= 59 ) {
 			minute++;
 			second = 0;
@@ -28,5 +32,9 @@ public class Timer extends Pane {
 		}
 		clock = String.format("%02d:%02d",minute, second);
 		label.setText(clock);
+	}
+	
+	public void setStartCounter(boolean start) {
+		this.startCounter = start;
 	}
 }

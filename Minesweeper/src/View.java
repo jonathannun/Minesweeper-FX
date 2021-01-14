@@ -24,6 +24,7 @@ public class View {
 	private MenuBar menu;
 	private Label counter;
 	private BorderPane window;
+	Timer timer;
 	
 	private static int tileSize = 20;
 	private static IntegerProperty width;
@@ -52,6 +53,7 @@ public class View {
 				this.tile.setFill(null);
 				this.text.setVisible(true);
 				mine.setVisible(true);
+				timer.setStartCounter(true);
 			});
 			model.getTile(x, y).flagOnTile().addListener((obs, oldBool, newBool) -> {				//Listens to changes to flagOnTile BooleanProperty of tile.
 				if (newBool && !model.getTile(x, y).tileVisible().get()) {
@@ -161,7 +163,7 @@ public class View {
 			}
 		}
 		
-		Timer timer = new Timer();
+		timer = new Timer();
 		AnchorPane Anchor = new AnchorPane();
 		
 		Button restartButton = new Button("Restart"); 
@@ -209,11 +211,11 @@ public class View {
 		});
 				
 		RadioMenuItem easy = new RadioMenuItem("Easy");
-		easy.setOnAction(e -> System.out.println("easy"));
+		easy.setOnAction(e -> restart(9,9,10));
 		RadioMenuItem medium = new RadioMenuItem("Medium");
-		medium.setOnAction(e -> System.out.println("medium"));
+		medium.setOnAction(e -> restart(16,16,40));
 		RadioMenuItem hard = new RadioMenuItem("Hard");
-		hard.setOnAction(e -> System.out.println("hard"));
+		hard.setOnAction(e -> restart(16,30,99));
 				
 		//Add to the ToogleGroup
 		m1.setToggleGroup(difficultyLevelGroup);
