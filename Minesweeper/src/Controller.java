@@ -6,6 +6,11 @@ public class Controller {
 	}
 	
 	public void leftClick(int x, int y) {															//Handles left click by user.
+		if (this.model.getGameStatus() || this.model.getTile(x, y).flagOnTile().get()) {
+			return;
+		} else if (model.getTile(x, y).bombOnTile().get()) {
+			this.model.setGameStatus(true);
+		}
 		this.model.getTile(x, y).setVisible();
 		this.model.reveal(x, y);
 	}

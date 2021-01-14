@@ -8,22 +8,23 @@ public class Model {
 	private IntegerProperty w;
 	private IntegerProperty h;
 	private int bombCount;
+	private Boolean lost;
 
 	class Tile {
-		private Boolean hasBomb;
+		private BooleanProperty hasBomb = new SimpleBooleanProperty();
 		private BooleanProperty hasFlag = new SimpleBooleanProperty();
 		private BooleanProperty isVisible = new SimpleBooleanProperty();
 		private IntegerProperty neighbours = new SimpleIntegerProperty();
 		
 		public Tile() {																				//Tile constructor
-			this.hasBomb = false;
+			this.hasBomb.set(false);
 			this.hasFlag.set(false);																//Sets BooleanProperty value
 			this.isVisible.set(false);																//^
 			
 			this.neighbours.set(0);;
 		}
 		
-		public Boolean bombOnTile() {																//Returns Boolean.
+		public BooleanProperty bombOnTile() {														//Returns Boolean.
 			return this.hasBomb;
 		}
 		
@@ -40,7 +41,7 @@ public class Model {
 		}
 		
 		public void setBomb() {																		//Places bomb on tile
-			this.hasBomb = true;
+			this.hasBomb.set(true);
 		}
 		
 		public void toggleFlag() {																	//Toggles flag placement on tile.
@@ -59,6 +60,7 @@ public class Model {
 	public Model(int w, int h, int bombCount) {														//Model constructor
 		this.w = new SimpleIntegerProperty();
 		this.h = new SimpleIntegerProperty();
+		this.lost = false;
 		
 		this.w.set(w);
 		this.h.set(h);
@@ -82,7 +84,7 @@ public class Model {
 			x = (int) (Math.random() * this.w.intValue());											//Coordinates for bomb chosen randomly.
 			y = (int) (Math.random() * this.h.intValue());
 			
-			if (!this.board[x][y].bombOnTile()) {													//Bomb placed at coordinates if empty.
+			if (!this.board[x][y].bombOnTile().get()) {													//Bomb placed at coordinates if empty.
 				this.board[x][y].setBomb();
 				i++;																				//Increment.
 			}
@@ -106,7 +108,7 @@ public class Model {
 				x = (j + jOffset) < this.w.intValue() ? (j + jOffset) : -1;
 				
 				if ((x >= 0) && (y >= 0)) {															//Checks if tile-coordinates are valid.
-					count += this.board[x][y].bombOnTile() ? 1 : 0;									//Increment if bomb found on tile.
+					count += this.board[x][y].bombOnTile().get() ? 1 : 0;							//Increment if bomb found on tile.
 				}
 			}
 		}
@@ -138,6 +140,10 @@ public class Model {
 			}
 		}
 	}
+	
+	public void setGameStatus(Boolean lost) {
+		this.lost = lost;
+	}
 
 	public IntegerProperty getW() {																	//Returns first dimension of the board.
 		return this.w;
@@ -159,10 +165,14 @@ public class Model {
 		String out = "";
 		for (int i = 0; i < this.h.intValue(); i++) {
 			for (int j = 0; j < this.w.intValue(); j++) {
-				out += getTile(j, i).bombOnTile() ? "X" : this.getTile(j, i).getNeighbours().intValue();
+				out += getTile(j, i).bombOnTile().get() ? "X" : this.getTile(j, i).getNeighbours().intValue();
 			}
 			out += "\n";
 		}
 		return out;
+	}
+	
+	public Boolean getGameStatus() {
+		return this.lost;
 	}
 }

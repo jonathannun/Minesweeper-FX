@@ -5,7 +5,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
@@ -26,9 +25,10 @@ public class View {
 	private Label counter;
 	private BorderPane window;
 	
-	private static int tileSize = 10;
+	private static int tileSize = 20;
 	private static IntegerProperty width;
 	private static IntegerProperty height;
+	private static IntegerProperty flagCount;
 	
 	
 	class Tile extends StackPane {																	//Tile object-class.
@@ -42,14 +42,6 @@ public class View {
 			this.tile = new Rectangle(tileSize, tileSize);								  			//Sets size of rectangle.
 			this.text = new Text();																	//Initializes empty text object.
 			
-			if (model.getTile(x, y).bombOnTile()) {													//Sets string value of text object.
-				mine.setFitHeight(tileSize);
-				mine.setFitWidth(tileSize);
-				getChildren().add(mine);
-			} else {
-				this.text.setText(controller.getNeighbours(x, y) == 0 ? "" : "" + controller.getNeighbours(x, y));
-			}
-			
 			this.tile.setStroke(Color.GREY);														//Adds grey border to rectangle object.
 			this.tile.setFill(Color.LIGHTGRAY);														//Changes color of rectangle.
 			
@@ -58,21 +50,63 @@ public class View {
 			
 			model.getTile(x, y).tileVisible().addListener((obs) -> {								//Listens to changes to tileVisible BooleanProperty of tile.
 				this.tile.setFill(null);
+				this.text.setVisible(true);
+				mine.setVisible(true);
 			});
 			model.getTile(x, y).flagOnTile().addListener((obs, oldBool, newBool) -> {				//Listens to changes to flagOnTile BooleanProperty of tile.
 				if (newBool && !model.getTile(x, y).tileVisible().get()) {
 					getChildren().add(flag);
+					flagCount.set(flagCount.get() + 1);
 				} else {
 					for (int i = 0; i < getChildren().size(); i++) {
 						if (getChildren().get(i) == flag) {
 							getChildren().remove(i);
+							flagCount.set(flagCount.get() - 1);
 						}
 					}
 				}
 			});
 			
-			getChildren().add(this.text);															//Adds nodes to tile.
 			getChildren().add(this.tile);
+			
+			if (model.getTile(x, y).bombOnTile().get()) {													//Sets string value of text object.
+				mine.setFitHeight(tileSize);
+				mine.setFitWidth(tileSize);
+				mine.setVisible(false);
+				getChildren().add(mine);
+			} else {
+				this.text.setText(controller.getNeighbours(x, y) == 0 ? "" : "" + controller.getNeighbours(x, y));
+				text.setVisible(false);
+			}
+			
+			switch (controller.getNeighbours(x, y)) {
+			case 1:
+				this.text.setFill(Color.BLUE);
+				break;
+			case 2:
+				this.text.setFill(Color.GREEN);
+				break;
+			case 3:
+				this.text.setFill(Color.RED);
+				break;
+			case 4:
+				this.text.setFill(Color.DARKBLUE);
+				break;
+			case 5:
+				this.text.setFill(Color.DARKRED);
+				break;
+			case 6:
+				this.text.setFill(Color.DARKCYAN);
+				break;
+			case 7:
+				this.text.setFill(Color.BLACK);
+				break;
+			default:
+				this.text.setFill(Color.GREY);
+				break;
+			}
+			
+			getChildren().add(this.text);															//Adds nodes to tile.
 			
 			setOnMouseClicked(e -> {																//Handles mouse-click event.
 				switch (e.getButton()) {
@@ -100,8 +134,9 @@ public class View {
 		
 		this.width = new SimpleIntegerProperty();
 		this.height = new SimpleIntegerProperty();
+		this.flagCount = new SimpleIntegerProperty();
 		
-		this.width.set(tileSize * this.model.getW().intValue());
+		this.width.set(tileSize * this.model.getW().intValue() < 550 ? 550 : tileSize * this.model.getW().intValue());
 		this.height.set(tileSize * this.model.getH().intValue() + 3);
 		
 		createGame();																				//Creates and adds tiles to pane.
@@ -137,6 +172,10 @@ public class View {
 		flag.setFitHeight(20);
 		flag.setFitWidth(20);
 		
+		this.flagCount.addListener((obs, oldInt, newInt) -> {
+			this.counter.setText("Remaining bombs: " + (model.getBombCount() - flagCount.intValue()));
+		});
+		
 		AnchorPane.setLeftAnchor(restartButton, Double.valueOf((this.width.intValue()) - 350));
 		AnchorPane.setLeftAnchor(timer, Double.valueOf((this.width.intValue()) - 250));
 		AnchorPane.setLeftAnchor(counter, Double.valueOf((this.width.intValue()) - 200));
@@ -150,7 +189,6 @@ public class View {
 	public MenuBar createMenuBar() {
 		//Menu
 		Menu menu = new Menu("Difficulty Level...");
-		Menu timeButton = new Menu("Time");
 		Menu mineFallButton = new Menu("MineFall");
 				
 		//Create menuItems for Difficult settings
@@ -176,7 +214,6 @@ public class View {
 		medium.setOnAction(e -> System.out.println("medium"));
 		RadioMenuItem hard = new RadioMenuItem("Hard");
 		hard.setOnAction(e -> System.out.println("hard"));
-		MenuItem restart = new MenuItem("Restart");
 				
 		//Add to the ToogleGroup
 		m1.setToggleGroup(difficultyLevelGroup);
@@ -185,25 +222,33 @@ public class View {
 		hard.setToggleGroup(difficultyLevelGroup);
 				
 		//Add menu-items to the menu object
-		menu.getItems().addAll(m1,easy,medium,hard,restart);
+		menu.getItems().addAll(m1,easy,medium,hard);
 
 		//MenuBar
 		MenuBar menuBar = new MenuBar();
 		
 		//Add the menu full of items to the menu-bar
-		menuBar.getMenus().addAll(menu ,timeButton, mineFallButton);
+		menuBar.getMenus().addAll(menu, mineFallButton);
 		return menuBar;
 	}
 	
 	public void restart(int w, int h, int mines) {
-	
 		this.model = new Model(w, h, mines);
 		this.controller = new Controller(this.model);
 		
 		this.gameWindow = new Pane();
 		
+		if (model.getH().intValue() <= 20) {
+			this.tileSize  = 40;
+		} else if (model.getH().intValue() <= 40) {
+			this.tileSize = 20;
+		} else {
+			this.tileSize = 10;
+		}
+			
 		this.height.set(tileSize * this.model.getH().intValue() + 3);
-		this.width.set(tileSize * this.model.getW().intValue()); 
+		this.width.set(tileSize * this.model.getW().intValue() < 550 ? 550 : tileSize * this.model.getW().intValue()); 
+		this.flagCount.set(0);
 		
 		this.gameWindow.setPrefHeight(this.height.intValue());									//Sets dimensions of pane object.
 		this.gameWindow.setPrefWidth(this.width.intValue());
