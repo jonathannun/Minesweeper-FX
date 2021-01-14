@@ -20,6 +20,7 @@ import javafx.scene.text.Text;
 public class View {
 	private Model model;
 	private Controller controller;
+	
 	private Pane gameWindow;
 	private MenuBar menu;
 	private Label counter;
@@ -38,7 +39,7 @@ public class View {
 		ImageView flag = new ImageView("Images/flag.png");
 		
 		public Tile(int x, int y) {																	//Constructor.
-			this.tile = new Rectangle(tileSize, tileSize);											//Sets size of rectangle.
+			this.tile = new Rectangle(tileSize, tileSize);								  			//Sets size of rectangle.
 			this.text = new Text();																	//Initializes empty text object.
 			
 			if (model.getTile(x, y).bombOnTile()) {													//Sets string value of text object.
@@ -136,9 +137,9 @@ public class View {
 		flag.setFitHeight(20);
 		flag.setFitWidth(20);
 		
-		AnchorPane.setLeftAnchor(restartButton, Double.valueOf((this.model.getW().intValue() * this.tileSize) - 350));
-		AnchorPane.setLeftAnchor(timer, Double.valueOf((this.model.getW().intValue() * this.tileSize) - 250));
-		AnchorPane.setLeftAnchor(counter, Double.valueOf((this.model.getW().intValue() * this.tileSize) - 200));
+		AnchorPane.setLeftAnchor(restartButton, Double.valueOf((this.width.intValue()) - 350));
+		AnchorPane.setLeftAnchor(timer, Double.valueOf((this.width.intValue()) - 250));
+		AnchorPane.setLeftAnchor(counter, Double.valueOf((this.width.intValue()) - 200));
 		
 		Anchor.getChildren().addAll(this.menu, counter, timer, restartButton);
 		

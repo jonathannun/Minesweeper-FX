@@ -5,10 +5,6 @@ public class Controller {
 		this.model = model;
 	}
 	
-	public void restart(Model model) {
-		this.model = model;
-	}
-	
 	public void leftClick(int x, int y) {															//Handles left click by user.
 		this.model.getTile(x, y).setVisible();
 		this.model.reveal(x, y);
