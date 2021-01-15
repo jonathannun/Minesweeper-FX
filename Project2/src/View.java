@@ -83,6 +83,7 @@ public class View {
 		
 		public static int[] show() {
 			
+			window.initModality(Modality.APPLICATION_MODAL);
 	        
 	        //Placement of width-label
 	        Label labelWidth = new Label("Insert the width of your grid: ");
@@ -416,7 +417,8 @@ public class View {
 	}
 	
 	public void restart(int w, int h, int mines) {
-		this.model = this.controller.updateModel(w, h, mines);
+		this.model = new Model(w, h, mines);
+		this.controller = new Controller(this.model);
 		
 		this.gameWindow = new Pane();
 		
