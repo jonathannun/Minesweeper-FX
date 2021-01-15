@@ -8,7 +8,7 @@ public class Model {
 	private IntegerProperty w;
 	private IntegerProperty h;
 	private int bombCount;
-	private Boolean lost;
+	private BooleanProperty lost;
 
 	class Tile {
 		private BooleanProperty hasBomb = new SimpleBooleanProperty();
@@ -60,7 +60,8 @@ public class Model {
 	public Model(int w, int h, int bombCount) {														//Model constructor
 		this.w = new SimpleIntegerProperty();
 		this.h = new SimpleIntegerProperty();
-		this.lost = false;
+		this.lost = new SimpleBooleanProperty();
+		this.lost.set(false);
 		
 		this.w.set(w);
 		this.h.set(h);
@@ -142,7 +143,7 @@ public class Model {
 	}
 	
 	public void setGameStatus(Boolean lost) {
-		this.lost = lost;
+		this.lost.set(lost); 
 	}
 
 	public IntegerProperty getW() {																	//Returns first dimension of the board.
@@ -172,7 +173,21 @@ public class Model {
 		return out;
 	}
 	
-	public Boolean getGameStatus() {
+	public BooleanProperty getGameStatus() {
 		return this.lost;
+	}
+	
+	public Boolean gameWon() {
+		for(int i = 0; i < this.getH().intValue(); i++) {
+			for(int j = 0; j < this.getW().intValue(); j++) {
+				if(!board[j][i].hasBomb.get() && !board[j][i].tileVisible().get()) {
+					return false;
+				} else if (board[j][i].hasBomb.get() && !board[j][i].hasFlag.get()) {
+					return false;
+				}
+			}
+		}
+		System.out.println("You Win");
+		return true;
 	}
 }

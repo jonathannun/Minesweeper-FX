@@ -50,13 +50,14 @@ public class View {
 			timeline = new Timeline(new KeyFrame(Duration.seconds(1), e-> counter()));
 			timeline.setCycleCount(Timeline.INDEFINITE);
 			timeline.play();
+			model.getGameStatus().addListener((obs) -> { 
+				timeline.stop();
+			});
 		}
 
 		public void counter() {
 			if(!startCounter) {
 				return;
-			} else if(model.getGameStatus()) {
-				timeline.stop();
 			}
 			
 			if(second >= 59 ) {
@@ -71,10 +72,6 @@ public class View {
 		
 		public void setStartCounter(boolean start) {
 			this.startCounter = start;
-		}
-		
-		public void stopTime() {
-			timeline.stop();
 		}
 	}
 
