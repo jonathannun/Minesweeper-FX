@@ -30,4 +30,8 @@ public class Controller {
 		return model.getTile(x, y).getNeighbours().intValue();
 	}
 	
+	public Model updateModel(int w, int h, int mines) {
+		this.model = new Model(w, h, mines);
+		return this.model;
+	}
 }

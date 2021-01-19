@@ -417,8 +417,7 @@ public class View {
 	}
 	
 	public void restart(int w, int h, int mines) {
-		this.model = new Model(w, h, mines);
-		this.controller = new Controller(this.model);
+		this.model = this.controller.updateModel(w, h, mines);
 		
 		this.gameWindow = new Pane();
 		
