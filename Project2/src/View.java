@@ -47,79 +47,79 @@ public class View {
 	private static IntegerProperty flagCount;
 	
 	
-	static class ErrorMessage extends TextFlow{
+	static class ErrorMessage extends TextFlow{														//Internal class ErrorMessage-object.
 
 		public static void display (String message) {
-			Stage stage = new Stage();
+			Stage stage = new Stage();																//New window.
 			
-			stage.initModality(Modality.APPLICATION_MODAL);
-			stage.setTitle("Error Message");
-			stage.setMinWidth(300);
+			stage.initModality(Modality.APPLICATION_MODAL);											//Interaction with the main window stops while the error message is open.
+			stage.setTitle("Error Message");														//Sets title of the new window.
+			stage.setMinWidth(300);																	
 			stage.setMinHeight(250);
 			
-			Label label = new Label();
-			label.setText(message);
-			label.setFont(Font.font(14));
-			label.setStyle("-fx-font-weight: bold");
+			Label label = new Label();																//Initializes new label node.
+			label.setText(message);																	//Label text fetched from parameter.
+			label.setFont(Font.font(14));															
+			label.setStyle("-fx-font-weight: bold");												//Bold font.
 			label.setTextAlignment(TextAlignment.CENTER);
-			Button closeButton = new Button("OK");
-			closeButton.setOnAction(e -> stage.close());
+			Button closeButton = new Button("OK");													//Initializes new button node.
+			closeButton.setOnAction(e -> stage.close());											//Button closes the new window.
 			
-			VBox layout = new VBox(10);
-			layout.getChildren().addAll(label, closeButton);
+			VBox layout = new VBox(10);																//VBox.
+			layout.getChildren().addAll(label, closeButton);										//Adds nodes to VBox.
 			layout.setAlignment(Pos.CENTER);
 			
-			Scene scene = new Scene(layout);
-			stage.setScene(scene);
+			Scene scene = new Scene(layout);														//New scene from VBox.
+			stage.setScene(scene);																	//Sets scene.
 			stage.showAndWait();
 		}
 	}
 
 	
 	static class PopUpBox {
-		static Stage window = new Stage();
+		static Stage window = new Stage();															//New window.
 		
 		static int[] widthLengthMines = new int[3];
 		
 		public static int[] show() {
 			
-			window.initModality(Modality.APPLICATION_MODAL);
+			window.initModality(Modality.APPLICATION_MODAL);										//Interaction with the main window stops while the pop-up is open.
 	        
 	        //Placement of width-label
-	        Label labelWidth = new Label("Insert the width of your grid: ");
+	        Label labelWidth = new Label("Insert the width of your grid: ");						//Label with user-instruction.
 	        GridPane.setConstraints(labelWidth, 0, 0);
 	        labelWidth.setFont(Font.font(14));
-	        TextField widthInput = new TextField();
+	        TextField widthInput = new TextField();													//Initializes TextField.
 	        GridPane.setConstraints(widthInput, 1, 0);
 	        
 	        
 	        //Placement of length-label
-	        Label labelHeight = new Label("Insert the height of your grid: ");
+	        Label labelHeight = new Label("Insert the height of your grid: ");						//Label with user-instruction.
 	        GridPane.setConstraints(labelHeight, 0, 1);
 	        labelHeight.setFont(Font.font(14));
-	        TextField heightInput = new TextField();
+	        TextField heightInput = new TextField();												//Initializes TextField.
 	        GridPane.setConstraints(heightInput, 1, 1);
 	        
 	        
 	        //Placement of mine settings
-	        Label labelMines = new Label("Insert the number of mines: ");
+	        Label labelMines = new Label("Insert the number of mines: ");							//Label with user-instruction.
 	        GridPane.setConstraints(labelMines, 0, 2);
 	        labelMines.setFont(Font.font(14));
-	        TextField mineInput = new TextField();
+	        TextField mineInput = new TextField();													//Initializes TextField.
 	        GridPane.setConstraints(mineInput, 1, 2);
 	        
 	        
 	        //Submit button to save the input
-	        Button submitButton = new Button("Submit");
+	        Button submitButton = new Button("Submit");												//Initializes submit-Button.
 	        submitButton.setFont(Font.font(14));
 	        GridPane.setConstraints(submitButton, 1, 3);
 	        
 	      //Close button to close the window
-	        Button closeButton = new Button("Close");
+	        Button closeButton = new Button("Close");												//Initializes close-Button.
 	        closeButton.setFont(Font.font(14));
 	        GridPane.setConstraints(closeButton, 1, 4);
 	        
-	       closeButton.setOnAction(e->{
+	       closeButton.setOnAction(e->{																//close-Button closes window.
 	    	   window.close();
 	    	   
 	       });
@@ -128,44 +128,62 @@ public class View {
 	        submitButton.setOnAction(e-> {
 	        	
 	        	//If input is int
-	        	if (isInt(widthInput) && isInt(heightInput) && isInt(mineInput)) {
+	        	if (isInt(widthInput) && isInt(heightInput) && isInt(mineInput)) {					//Checks validity of input.
 	        		
 	        		if(Integer.parseInt(widthInput.getText()) > 100 || Integer.parseInt(heightInput.getText()) > 100) {
-	        			ErrorMessage.display("ERROR!\nThe size of the board is too big.\nIt cannot exceed 100. Reduce the size.");
+	        			ErrorMessage.display("ERROR!\n"												//New error message. Size of board too big.
+	        								+ "The size of the board is too big.\n"			
+	        								+ "It cannot exceed 100. Reduce the size.");
 	        		} else if(Integer.parseInt(widthInput.getText()) < 4 || Integer.parseInt(heightInput.getText()) < 4) {
-	        			ErrorMessage.display("ERROR!\nThe size of the board is too small.\nIt must be larger than 4. Adjust the size.");
+	        			ErrorMessage.display("ERROR!\n"												//New error message. Size of board too small.
+	        								+ "The size of the board is too small.\n"		
+	        								+ "It must be larger than 4. Adjust the size.");
 	        		} else if(Integer.parseInt(widthInput.getText())*Integer.parseInt(heightInput.getText()) <= Integer.parseInt(mineInput.getText())) {
-	            		ErrorMessage.display("ERROR!\nThe number of mines exceeds the size of the board.\nReduce the amount of mines, or adjust the size of the board.");
+	            		ErrorMessage.display("ERROR!\n"												//New error message. Too many bombs.
+	            							+ "The number of mines exceeds the size of the board.\n"
+	            							+ "Reduce the amount of mines, or adjust the size of the board.");
 	            	} else {
-	            		widthLengthMines[0] = Integer.parseInt(widthInput.getText());
-	            		widthLengthMines[1] = Integer.parseInt(heightInput.getText());
-	            		widthLengthMines[2]= Integer.parseInt(mineInput.getText());
-	            		window.close();
+	            		widthLengthMines[0] = Integer.parseInt(widthInput.getText());				//Parse user input as integer.
+	            		widthLengthMines[1] = Integer.parseInt(heightInput.getText());				//^
+	            		widthLengthMines[2]= Integer.parseInt(mineInput.getText());					//^
+	            		window.close();																//Close window.
 	            	}
 	        	} else if(widthInput.getText().trim().isEmpty()||heightInput.getText().trim().isEmpty()||mineInput.getText().trim().isEmpty()) {
-	        		ErrorMessage.display("ERROR!\nOne or more boxes are left empty!\nPlease insert a number in all boxes." );
+	        		ErrorMessage.display("ERROR!\n"													//New error message. Missing input.
+	        							+ "One or more boxes are left empty!\n"
+	        							+ "Please insert a number in all boxes." );
 	        	} else {
-	        		ErrorMessage.display("ERROR!\nPlease insert a number." );
+	        		ErrorMessage.display("ERROR!\n"													//New error message. NaN.
+	        							+ "Please insert a number." );
 	        	}
 	        	
 	        });
 	         
 	        //Grid
-	        GridPane grid = new GridPane();
-	        grid.setPadding(new Insets(10,10,10,10));
-			grid.setVgap(8);
-			grid.setHgap(10);
-	        grid.getChildren().addAll(labelWidth, widthInput, labelHeight, heightInput, labelMines, mineInput, submitButton,closeButton);
-	        Scene scene = new Scene(grid, 400, 250);
-	        window.setTitle("Modify...");
-	        window.setScene(scene);
+	        GridPane grid = new GridPane();															//New GridPane.
+	        grid.setPadding(new Insets(10,10,10,10));												//Padding between window border.
+			grid.setVgap(8);																		//Vertical gap between nodes.
+			grid.setHgap(10);																		//Horizontal gap between nodes.
+	        grid.getChildren().addAll(labelWidth, 													//Adds nodes as children to GridPane.
+	        						  widthInput, 
+	        						  labelHeight, 
+	        						  heightInput, 
+	        						  labelMines, 
+	        						  mineInput, 
+	        						  submitButton,
+	        						  closeButton);
+	        
+	        Scene scene = new Scene(grid, 400, 250);												//New scene from GridPane.
+	        window.setTitle("Modify...");															//Sets window title.
+	        window.setScene(scene);																	//Sets scene.
 	        window.showAndWait();
-	       return widthLengthMines;
+	        
+	       return widthLengthMines;																	//Returns user input.
 	        
 		}
 	 
 		//Verify input
-	    private static boolean isInt(TextField input) {
+	    private static boolean isInt(TextField input) {												//Checks if input is an integer.
 	    	try {
 	    		int number = Integer.parseInt(input.getText());
 	    		return true;
@@ -176,41 +194,41 @@ public class View {
 	 
 	}
 	
-	class Timer extends Pane {
-		private Timeline timeline = new Timeline();
-		private int minute = 0;
-		private int second = 0;
+	class Timer extends Pane {																		//Timer feature.
+		private Timeline timeline = new Timeline();													//Initializes TimeLine.
+		private int minute = 0;																		//Sets starting value.
+		private int second = 0;																		//^
 		private String clock = "";
 		private boolean startCounter = false;
 		
-		Label label = new Label(String.format("%02d:%02d", minute,second));
+		Label label = new Label(String.format("%02d:%02d", minute,second));							//Formatting.
 		
-		public Timer() {
-			getChildren().add(label);
-			timeline = new Timeline(new KeyFrame(Duration.seconds(1), e-> counter()));
+		public Timer() {																			//Timer-object constructor.
+			getChildren().add(label);																//Adds label as child node.
+			timeline = new Timeline(new KeyFrame(Duration.seconds(1), e-> counter()));				//Increment timer.
 			timeline.setCycleCount(Timeline.INDEFINITE);
-			timeline.play();
-			model.getGameStatus().addListener((obs) -> { 
-				timeline.stop();
+			timeline.play();																		//Start timer.
+			model.getGameStatus().addListener((obs) -> { 											//Listens to changes to BooleanProperty lost.
+				timeline.stop();																	//Stops timer.
 			});
 		}
 
 		public void counter() {
-			if(!startCounter) {
+			if(!startCounter) {																		//Checks if timer has started.
 				return;
 			}
 			
-			if(second >= 59 ) {
+			if(second >= 59 ) {																		//Increment minutes.
 				minute++;
 				second = 0;
 			} else {
-				second++;
+				second++;																			//Increment seconds.
 			}
-			clock = String.format("%02d:%02d",minute, second);
-			label.setText(clock);
+			clock = String.format("%02d:%02d",minute, second);										//More formatting.
+			label.setText(clock);																	//Sets timer label text.
 		}
 		
-		public void setStartCounter(boolean start) {
+		public void setStartCounter(boolean start) {												//Starts timer.
 			this.startCounter = start;
 		}
 	}
@@ -241,31 +259,31 @@ public class View {
 			});
 			model.getTile(x, y).flagOnTile().addListener((obs, oldBool, newBool) -> {				//Listens to changes to flagOnTile BooleanProperty of tile.
 				if (newBool && !model.getTile(x, y).tileVisible().get()) {
-					getChildren().add(flag);
-					flagCount.set(flagCount.get() + 1);
+					getChildren().add(flag);														//Places flag image on tile.
+					flagCount.set(flagCount.get() + 1);												//Increments flag counter.
 				} else {
 					for (int i = 0; i < getChildren().size(); i++) {
 						if (getChildren().get(i) == flag) {
-							getChildren().remove(i);
-							flagCount.set(flagCount.get() - 1);
+							getChildren().remove(i);												//Removes flag from tile.
+							flagCount.set(flagCount.get() - 1);										//Decrement flag counter.
 						}
 					}
 				}
 			});
 			
-			getChildren().add(this.tile);
+			getChildren().add(this.tile);															//Adds rectangle as child node to tile.
 			
-			if (model.getTile(x, y).bombOnTile().get()) {													//Sets string value of text object.
-				mine.setFitHeight(tileSize);
-				mine.setFitWidth(tileSize);
-				mine.setVisible(false);
-				getChildren().add(mine);
-			} else {
+			if (model.getTile(x, y).bombOnTile().get()) {											//Formats bomb image is tile has bomb.
+				mine.setFitHeight(tileSize);														//Sets height of image.
+				mine.setFitWidth(tileSize);															//Sets width of image.
+				mine.setVisible(false);																//Hides image.
+				getChildren().add(mine);															//Adds image of bomb as child node to tile.
+			} else {																				//Sets string-value of Text-object.
 				this.text.setText(controller.getNeighbours(x, y) == 0 ? "" : "" + controller.getNeighbours(x, y));
 				text.setVisible(false);
 			}
 			
-			switch (controller.getNeighbours(x, y)) {
+			switch (controller.getNeighbours(x, y)) {												//Sets text-color.
 			case 1:
 				this.text.setFill(Color.BLUE);
 				break;
@@ -347,29 +365,32 @@ public class View {
 			}
 		}
 		
-		timer = new Timer();
-		AnchorPane Anchor = new AnchorPane();
+		timer = new Timer();																		//New Timer-object.
+		AnchorPane Anchor = new AnchorPane();														//New AcnhorPane
 		
-		Button restartButton = new Button("Restart"); 
-		restartButton.setOnAction(e-> restart(model.getW().intValue(), model.getH().intValue(), model.getBombCount()));
+		Button restartButton = new Button("Restart"); 												//New restart-Button
+		restartButton.setOnAction(e-> restart(model.getW().intValue(), 								//Button restarts game when clicked.
+									  model.getH().intValue(), 
+									  model.getBombCount()));
 		
-		ImageView flag = new ImageView("Images/Flag.png");
-		counter.setGraphic(flag);
-		flag.setFitHeight(20);
+		ImageView flag = new ImageView("Images/Flag.png");											//Flag image for flag counter.
+		counter.setGraphic(flag);																	
+		flag.setFitHeight(20);																		//Image formatting.
 		flag.setFitWidth(20);
 		
-		this.flagCount.addListener((obs, oldInt, newInt) -> {
-			this.counter.setText("Remaining bombs: " + (model.getBombCount() - flagCount.intValue()));
+		this.flagCount.addListener((obs, oldInt, newInt) -> {										//Listens to changes to flagCount.
+			this.counter.setText("Remaining bombs: " 												//Flag counter set to sum of amount of bombs and number of placed flags.
+								+ (model.getBombCount() - flagCount.intValue()));
 		});
 		
-		AnchorPane.setLeftAnchor(restartButton, Double.valueOf((this.width.intValue()) - 350));
-		AnchorPane.setLeftAnchor(timer, Double.valueOf((this.width.intValue()) - 250));
-		AnchorPane.setLeftAnchor(counter, Double.valueOf((this.width.intValue()) - 200));
+		AnchorPane.setLeftAnchor(restartButton, Double.valueOf((this.width.intValue()) - 350));		//Button placement.
+		AnchorPane.setLeftAnchor(timer, Double.valueOf((this.width.intValue()) - 250));				//^
+		AnchorPane.setLeftAnchor(counter, Double.valueOf((this.width.intValue()) - 200));			//^
 		
-		Anchor.getChildren().addAll(this.menu, counter, timer, restartButton);
+		Anchor.getChildren().addAll(this.menu, counter, timer, restartButton);						//Adds nodes as children to AnchorPane.
 		
-		this.window.setCenter(gameWindow);
-		this.window.setTop(Anchor);
+		this.window.setCenter(gameWindow);															//Sets game window in center of window.
+		this.window.setTop(Anchor);																	//Sets AnchorPane at the top of the window.
 	}
 	
 	public MenuBar createMenuBar() {

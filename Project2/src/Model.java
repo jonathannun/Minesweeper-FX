@@ -11,32 +11,32 @@ public class Model {
 	private BooleanProperty lost;
 
 	class Tile {
-		private BooleanProperty hasBomb = new SimpleBooleanProperty();
+		private BooleanProperty hasBomb = new SimpleBooleanProperty();								//Initializes objects.
 		private BooleanProperty hasFlag = new SimpleBooleanProperty();
 		private BooleanProperty isVisible = new SimpleBooleanProperty();
 		private IntegerProperty neighbours = new SimpleIntegerProperty();
 		
 		public Tile() {																				//Tile constructor
-			this.hasBomb.set(false);
-			this.hasFlag.set(false);																//Sets BooleanProperty value
+			this.hasBomb.set(false);																//Sets BooleanProperty value
+			this.hasFlag.set(false);																//^
 			this.isVisible.set(false);																//^
 			
-			this.neighbours.set(0);;
+			this.neighbours.set(0);;																//Sets IntegerProperty value.
 		}
 		
-		public BooleanProperty bombOnTile() {														//Returns Boolean.
+		public BooleanProperty bombOnTile() {														//Returns BooleanProperty hasBomb.
 			return this.hasBomb;
 		}
 		
-		public BooleanProperty flagOnTile() {														//Returns BooleanProperty.
+		public BooleanProperty flagOnTile() {														//Returns BooleanProperty hasFlag.
 			return this.hasFlag;
 		}
 		
-		public BooleanProperty tileVisible() {														//Returns BooleanProperty.
+		public BooleanProperty tileVisible() {														//Returns BooleanProperty isVisible.
 			return this.isVisible;
 		}
 		
-		public IntegerProperty getNeighbours() {													//Returns integer.
+		public IntegerProperty getNeighbours() {													//Returns IntegerProperty neighbours.
 			return this.neighbours;
 		}
 		
@@ -52,15 +52,15 @@ public class Model {
 			this.neighbours.set(neighbours);
 		}
 		
-		public void setVisible() {																	//Sets BooleanProperty to true.
+		public void setVisible() {																	//Sets BooleanProperty isVisible to true.
 			this.isVisible.set(true);
 		}
 	}
 	
 	public Model(int w, int h, int bombCount) {														//Model constructor
-		this.w = new SimpleIntegerProperty();
-		this.h = new SimpleIntegerProperty();
-		this.lost = new SimpleBooleanProperty();
+		this.w = new SimpleIntegerProperty();														//Initializes objects.
+		this.h = new SimpleIntegerProperty();														//^
+		this.lost = new SimpleBooleanProperty();													//^
 		this.lost.set(false);
 		
 		this.w.set(w);
@@ -85,9 +85,9 @@ public class Model {
 			x = (int) (Math.random() * this.w.intValue());											//Coordinates for bomb chosen randomly.
 			y = (int) (Math.random() * this.h.intValue());
 			
-			if (!this.board[x][y].bombOnTile().get()) {													//Bomb placed at coordinates if empty.
+			if (!this.board[x][y].bombOnTile().get()) {												//Bomb placed at coordinates if empty.
 				this.board[x][y].setBomb();
-				i++;																				//Increment.
+				i++;																				//Increment number of placed bombs.
 			}
 		}
 		
@@ -117,24 +117,24 @@ public class Model {
 		this.board[j][i].setNeighbours(count);														//Set number of adjacent bombs to tile.
 	}
 	
-	public void reveal(int j, int i) {
+	public void reveal(int j, int i) {																
 		int x, y;
-		for (int iOffset = -1; iOffset <= 1; iOffset++) {
-			y = (i + iOffset) < this.h.intValue() ? (i + iOffset) : -1;
+		for (int iOffset = -1; iOffset <= 1; iOffset++) {											//Adjacency reach as coordinate offset.
+			y = (i + iOffset) < this.h.intValue() ? (i + iOffset) : -1;								//OoB-handling
 			
 			for (int jOffset = -1; jOffset <= 1; jOffset++) {
 				x = (j + jOffset) < this.w.intValue() ? (j + jOffset) : -1;
 				
 				if ((x >= 0) && (y >= 0)) {															//Checks if tile-coordinates are valid.
-					if (this.board[x][y].flagOnTile().get()) {
+					if (this.board[x][y].flagOnTile().get()) {										//Skips tiles with flags.
 						continue;
 					}
 					if (this.board[x][y].getNeighbours().intValue() == 0 && !this.board[x][y].tileVisible().get()) {
 						this.board[x][y].setVisible();
-						reveal(x, y);
+						reveal(x, y);																//Recursion if neighbour is empty
 					}
 					if (this.board[j][i].getNeighbours().intValue() == 0) {
-						this.board[x][y].setVisible();
+						this.board[x][y].setVisible();												//Reveal neighbours is original tile is empty.
 					}
 
 				}
@@ -142,7 +142,21 @@ public class Model {
 		}
 	}
 	
-	public void setGameStatus(Boolean lost) {
+	public Boolean gameWon() {																		//Checks if player has won.
+		for(int i = 0; i < this.getH().intValue(); i++) {
+			for(int j = 0; j < this.getW().intValue(); j++) {
+				if(!board[j][i].hasBomb.get() && !board[j][i].tileVisible().get()) {
+					return false;
+				} else if (board[j][i].hasBomb.get() && !board[j][i].hasFlag.get()) {
+					return false;
+				}
+			}
+		}
+		System.out.println("You Win");																//Confirmation.
+		return true;
+	}
+	
+	public void setGameStatus(Boolean lost) {														//Set game status.
 		this.lost.set(lost); 
 	}
 
@@ -158,6 +172,10 @@ public class Model {
 		return this.bombCount;
 	}
 	
+	public BooleanProperty getGameStatus() {														//Returns BooleanProperty lost.
+		return this.lost;
+	}
+	
 	public Tile getTile(int x, int y) {																//Returns tile.
 		return this.board[x][y];
 	}
@@ -171,23 +189,5 @@ public class Model {
 			out += "\n";
 		}
 		return out;
-	}
-	
-	public BooleanProperty getGameStatus() {
-		return this.lost;
-	}
-	
-	public Boolean gameWon() {
-		for(int i = 0; i < this.getH().intValue(); i++) {
-			for(int j = 0; j < this.getW().intValue(); j++) {
-				if(!board[j][i].hasBomb.get() && !board[j][i].tileVisible().get()) {
-					return false;
-				} else if (board[j][i].hasBomb.get() && !board[j][i].hasFlag.get()) {
-					return false;
-				}
-			}
-		}
-		System.out.println("You Win");
-		return true;
 	}
 }
