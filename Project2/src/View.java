@@ -390,6 +390,8 @@ public class View {
 		flag.setFitHeight(20);																		//Image formatting.
 		flag.setFitWidth(20);
 		
+		this.counter.setText("Remaining bombs: " + (model.getBombCount() - flagCount.intValue()));
+		
 		this.flagCount.addListener((obs, oldInt, newInt) -> {										//Listens to changes to flagCount.
 			this.counter.setText("Remaining bombs: " 												//Flag counter set to sum of amount of bombs and number of placed flags.
 								+ (model.getBombCount() - flagCount.intValue()));
