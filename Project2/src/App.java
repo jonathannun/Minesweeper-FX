@@ -13,10 +13,10 @@ public class App extends Application{
 		Scene scene = new Scene(view.asParent());													//Scene get from View-object.
 		
 		view.getWidth().addListener((obs, oldW, newW) -> {											//Listens to changes in scene width.
-			stage.setWidth(newW.doubleValue() <500 ? 500 : newW.doubleValue());						//Updates stage width.
+			stage.setWidth(newW.doubleValue() <500 ? 500 : newW.doubleValue() + 16);						//Updates stage width.
 			});
 		view.getHeight().addListener((obs, oldH, newH) -> {											//Listens to changes in scene height.
-			stage.setHeight(newH.doubleValue());													//Updates stage height.
+			stage.setHeight(newH.doubleValue() + 64);													//Updates stage height.
 			});
 		
 		stage.setScene(scene);																		//Sets scene.
