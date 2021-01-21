@@ -41,7 +41,7 @@ public class View {
 	
 	Timer timer;
 	
-	private static int tileSize = 20;
+	private static int tileSize = 32;
 	private static IntegerProperty width;
 	private static IntegerProperty height;
 	private static IntegerProperty flagCount;
@@ -237,8 +237,8 @@ public class View {
 		private Rectangle tile;																		//Rectangle object.
 		private Text text;																			//Text object.
 		
-		ImageView mine = new ImageView(getClass().getResource("Images/mine.png").toString());
-		ImageView flag = new ImageView(getClass().getResource("Images/flag.png").toString());
+		ImageView mine = new ImageView(getClass().getResource("Images/Mine.png").toString());
+		ImageView flag = new ImageView(getClass().getResource("Images/Flag.png").toString());
 		
 		public Tile(int x, int y) {																	//Constructor.
 			this.tile = new Rectangle(tileSize, tileSize);								  			//Sets size of rectangle.
@@ -384,7 +384,7 @@ public class View {
 									  model.getH().intValue(), 
 									  model.getBombCount()));
 		
-		ImageView flag = new ImageView(getClass().getResource("Images/flag.png").toString());		//Flag image for flag counter.
+		ImageView flag = new ImageView(getClass().getResource("Images/Flag.png").toString());		//Flag image for flag counter.
 		
 		counter.setGraphic(flag);																	
 		flag.setFitHeight(20);																		//Image formatting.
@@ -455,11 +455,11 @@ public class View {
 		this.gameWindow = new Pane();
 		
 		if (model.getH().intValue() <= 20) {
-			this.tileSize  = 40;
+			this.tileSize  = 32;
 		} else if (model.getH().intValue() <= 40) {
-			this.tileSize = 20;
+			this.tileSize = 16;
 		} else {
-			this.tileSize = 10;
+			this.tileSize = 8;
 		}
 			
 		this.height.set(tileSize * this.model.getH().intValue() + 3);

@@ -6,7 +6,7 @@ public class App extends Application{
 
 	@Override
 	public void start(Stage stage) {
-		Model model = new Model(40, 40, 40);														//Model-object intialized
+		Model model = new Model(9, 9, 10);														//Model-object intialized
 		Controller controller = new Controller(model);												//Controller-object initialized with access to Model-object.
 		View view = new View(model, controller);													//View-object initialized with access to both Model-, and View-object.
 		
