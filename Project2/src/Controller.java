@@ -6,23 +6,25 @@ public class Controller {
 	}
 	
 	public void leftClick(int x, int y) {															//Handles left click by user.
-		if (this.model.getGameStatus().get() || this.model.getTile(x, y).flagOnTile().get()) {
+		if (this.model.getGameStatus().intValue() != 0 || this.model.getTile(x, y).flagOnTile().get()) {
 			return;
 		} 
 		this.model.getTile(x, y).setVisible();
 		this.model.reveal(x, y);
-		if (model.getTile(x, y).bombOnTile().get() || model.gameWon()) {
-			this.model.setGameStatus(true);
-		} 
+		if (model.getTile(x, y).bombOnTile().get()) {
+			this.model.setGameStatus(1);
+		} else if (model.gameWon()) {
+			this.model.setGameStatus(2);
+		}
 	}
 	
 	public void rightClick(int x, int y) {															//Handles right click by user.
-		if(this.model.getGameStatus().get()) {
+		if(this.model.getGameStatus().intValue() != 0) {
 			return;
 		}
 		this.model.getTile(x, y).toggleFlag();
 		if (model.gameWon()) {
-			this.model.setGameStatus(true);
+			this.model.setGameStatus(2);
 		}
 	}
 	

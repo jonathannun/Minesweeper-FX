@@ -77,14 +77,13 @@ public class View {
 
 	
 	static class PopUpBox {
-		static Stage window = new Stage();															//New window.
-		
 		static int[] widthLengthMines = new int[3];
 		
 		public static int[] show() {
+			Stage window = new Stage();															//New window.
+			window.initModality(Modality.APPLICATION_MODAL);									//Interaction with the main window stops while the pop-up is open.
+							
 			
-			window.initModality(Modality.APPLICATION_MODAL);										//Interaction with the main window stops while the pop-up is open.
-	        
 	        //Placement of width-label
 	        Label labelWidth = new Label("Insert the width of your grid: ");						//Label with user-instruction.
 	        GridPane.setConstraints(labelWidth, 0, 0);
@@ -238,8 +237,8 @@ public class View {
 		private Rectangle tile;																		//Rectangle object.
 		private Text text;																			//Text object.
 		
-		ImageView mine = new ImageView("Images/mine.png");
-		ImageView flag = new ImageView("Images/flag.png");
+		ImageView mine = new ImageView(getClass().getResource("Images/mine.png").toString());
+		ImageView flag = new ImageView(getClass().getResource("Images/flag.png").toString());
 		
 		public Tile(int x, int y) {																	//Constructor.
 			this.tile = new Rectangle(tileSize, tileSize);								  			//Sets size of rectangle.
@@ -257,6 +256,7 @@ public class View {
 				mine.setVisible(true);
 				timer.setStartCounter(true);
 			});
+			
 			model.getTile(x, y).flagOnTile().addListener((obs, oldBool, newBool) -> {				//Listens to changes to flagOnTile BooleanProperty of tile.
 				if (newBool && !model.getTile(x, y).tileVisible().get()) {
 					getChildren().add(flag);														//Places flag image on tile.
@@ -327,7 +327,6 @@ public class View {
 		}
 	}
 	
-	
 	public View(Model model, Controller controller) {												//Constructor
 		this.model = model;
 		this.controller = controller;
@@ -369,11 +368,24 @@ public class View {
 		AnchorPane Anchor = new AnchorPane();														//New AcnhorPane
 		
 		Button restartButton = new Button("Restart"); 												//New restart-Button
+		
+		model.getGameStatus().addListener((obs,oldInt,newInt) -> {									//Setting collors when game over
+			switch (newInt.intValue()) {
+				case 1:
+					restartButton.setStyle("-fx-background-color: #e31212;");						//Red colloer for lost game
+					break;
+				case 2:
+					restartButton.setStyle("-fx-background-color: #0be31d;");						//Green collor for won game
+					break;
+			}
+		});
+		
 		restartButton.setOnAction(e-> restart(model.getW().intValue(), 								//Button restarts game when clicked.
 									  model.getH().intValue(), 
 									  model.getBombCount()));
 		
-		ImageView flag = new ImageView("Images/Flag.png");											//Flag image for flag counter.
+		ImageView flag = new ImageView(getClass().getResource("Images/flag.png").toString());		//Flag image for flag counter.
+		
 		counter.setGraphic(flag);																	
 		flag.setFitHeight(20);																		//Image formatting.
 		flag.setFitWidth(20);

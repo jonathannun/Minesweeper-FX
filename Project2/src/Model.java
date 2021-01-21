@@ -8,7 +8,7 @@ public class Model {
 	private IntegerProperty w;
 	private IntegerProperty h;
 	private int bombCount;
-	private BooleanProperty lost;
+	private IntegerProperty status;
 
 	class Tile {
 		private BooleanProperty hasBomb = new SimpleBooleanProperty();								//Initializes objects.
@@ -60,8 +60,8 @@ public class Model {
 	public Model(int w, int h, int bombCount) {														//Model constructor
 		this.w = new SimpleIntegerProperty();														//Initializes objects.
 		this.h = new SimpleIntegerProperty();														//^
-		this.lost = new SimpleBooleanProperty();													//^
-		this.lost.set(false);
+		this.status = new SimpleIntegerProperty();													//^
+		this.status.set(0);
 		
 		this.w.set(w);
 		this.h.set(h);
@@ -156,8 +156,8 @@ public class Model {
 		return true;
 	}
 	
-	public void setGameStatus(Boolean lost) {														//Set game status.
-		this.lost.set(lost); 
+	public void setGameStatus(int status) {														//Set game status.
+		this.status.set(status); 
 	}
 
 	public IntegerProperty getW() {																	//Returns first dimension of the board.
@@ -172,8 +172,8 @@ public class Model {
 		return this.bombCount;
 	}
 	
-	public BooleanProperty getGameStatus() {														//Returns BooleanProperty lost.
-		return this.lost;
+	public IntegerProperty getGameStatus() {														//Returns BooleanProperty lost.
+		return this.status;
 	}
 	
 	public Tile getTile(int x, int y) {																//Returns tile.
